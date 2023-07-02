@@ -1,7 +1,26 @@
 <template>
-  <div>APP</div>
+  <div class="container">
+    <!-- 顶部全局组件 -->
+    <HospitalTop />
+
+    <!-- 展示路由组件的区域 -->
+    <div class="content">这是路由组件区域</div>
+    <!-- 底部组件 -->
+    <HospitalBottom />
+  </div>
 </template>
 
-<script setup></script>
+<script setup lang="ts"></script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .content {
+    margin-top: 70px;
+    width: 1200px;
+    min-height: 809px;
+  }
+}
+</style>
