@@ -23,7 +23,7 @@
           :background="true"
           layout="prev, pager, next, jumper,->, sizes,total "
           :total="13"
-          style="margin-bottom: 10px;"
+          style="margin-bottom: 10px"
         />
       </el-col>
       <el-col :span="4">
