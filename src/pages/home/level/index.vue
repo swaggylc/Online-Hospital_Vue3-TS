@@ -1,6 +1,6 @@
 <template>
   <div class="level">
-    <h1>医院</h1>
+    <h4>医院</h4>
     <div class="content">
       <div class="left">等级：</div>
       <ul class="hospital">
@@ -21,7 +21,7 @@
 <style scoped lang="scss">
 .level {
   color: #7f7f7f;
-  h1 {
+  h4 {
     font-weight: 900;
     margin: 10px 0;
   }

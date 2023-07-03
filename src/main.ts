@@ -10,8 +10,12 @@ import HospitalBottom from "@/components/hospital_bottom/index.vue";
 // 引入vue-router
 import router from "@/router/index.ts";
 // 引入element-plus
-import ElementPlus from 'element-plus'
-import 'element-plus/dist/index.css'
+import ElementPlus from "element-plus";
+import "element-plus/dist/index.css";
+// 引入element-plus的国际化（中文）
+// 忽略ts校验
+// @ts-ignore
+import zhCn from "element-plus/dist/locale/zh-cn.mjs";
 
 // 利用createApp方法创建Vue实例，并且将应用实例挂载到挂载点上
 const app = createApp(App);
@@ -20,6 +24,9 @@ app.component("HospitalBottom", HospitalBottom);
 // 安装vue-router
 app.use(router);
 // 安装element-plus
-app.use(ElementPlus)
+app.use(ElementPlus, {
+  locale: zhCn,
+});
+
 // 挂载到id为app的元素上
 app.mount("#app");

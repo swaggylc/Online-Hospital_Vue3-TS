@@ -1,7 +1,16 @@
 <template>
   <el-carousel height="350px">
-    <el-carousel-item v-for="item in 4" :key="item">
-      <img src="../../../assets/images/web-banner-1.png" alt="" />
+    <el-carousel-item>
+      <img src="../../../assets/images/banner_1.png" alt="" />
+    </el-carousel-item>
+    <el-carousel-item>
+      <img src="../../../assets/images/banner_2.jpg" alt="" />
+    </el-carousel-item>
+    <el-carousel-item>
+      <img src="../../../assets/images/banner_3.png" alt="" />
+    </el-carousel-item>
+    <el-carousel-item>
+      <img src="../../../assets/images/banner_5.jpg" alt="" />
     </el-carousel-item>
   </el-carousel>
 </template>
