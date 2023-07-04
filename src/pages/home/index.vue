@@ -55,10 +55,11 @@ import Card from "./card/index.vue";
 import { ref, onMounted } from "vue";
 // 引入获取数据的函数
 import { reqHospital } from "@/api/home";
+import type { Content, HospitalResponseData } from "@/api/home/type";
 
 let pageNo = ref<number>(1); // 当前页
 let pageSize = ref<number>(10); // 每页显示条数
-let hasHospitalArr = ref([]); //医院列表数据
+let hasHospitalArr = ref<Content>([]); //医院列表数据
 let total = ref<number>(0); // 总个数
 
 // 组件挂载完毕后发送一次请求
@@ -69,7 +70,10 @@ onMounted(() => {
 // 获取医院的数据
 const getHospitalInfo = async () => {
   // 获取医院的数据，默认第一页，每页显示10条
-  let result: any = await reqHospital(pageNo.value, pageSize.value);
+  let result: HospitalResponseData = await reqHospital(
+    pageNo.value,
+    pageSize.value
+  );
   console.log("result", result);
 
   if (result.code === 200) {
