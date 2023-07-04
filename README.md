@@ -10,8 +10,14 @@ Vue3+Vite+TypeScript+Vue-router+Pinia+Element-Plus+Axios
 
 #### 3、svg矢量图标
 
-#### 4、路由鉴权
+复制svg代码直接使用
 
-#### 5、封装通用全局组件
+#### 4、pinia
 
-#### 6、Vue3组合式API
+pinia中没有vuex的mutation
+
+#### 5、路由鉴权
+
+#### 6、封装通用全局组件
+
+#### 7、Vue3组合式API

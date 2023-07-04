@@ -56,6 +56,11 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from "vue";
+// 引入仓库
+import useDetailStore from "@/store/modules/hospitalDetail.ts";
+// 获取仓库对象
+let detailStore = useDetailStore();
 // 左侧菜单需要用到的图标
 import {
   OfficeBuilding,
@@ -79,6 +84,35 @@ const changeActive = (path: string) => {
     path,
   });
 };
+
+// 组件挂载完毕：通知pinia仓库发请求，存数据
+onMounted(() => {
+  // console.log("组件挂载完毕");
+  // 发请求
+  detailStore.getHospital($route.query.hoscode);
+
+
+
+
+
+
+
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
 </script>
 
 <style scoped lang="scss">

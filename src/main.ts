@@ -9,6 +9,8 @@ import HospitalTop from "@/components/hospital_top/index.vue";
 import HospitalBottom from "@/components/hospital_bottom/index.vue";
 // 引入vue-router
 import router from "@/router/index.ts";
+// 引入pinia仓库
+import pinia from "@/store/index.ts";
 // 引入element-plus
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
@@ -23,6 +25,8 @@ app.component("HospitalTop", HospitalTop);
 app.component("HospitalBottom", HospitalBottom);
 // 安装vue-router
 app.use(router);
+// 安装pinia仓库
+app.use(pinia);
 // 安装element-plus
 app.use(ElementPlus, {
   locale: zhCn,
