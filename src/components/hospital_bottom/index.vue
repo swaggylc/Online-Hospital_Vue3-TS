@@ -29,10 +29,11 @@
     align-items: center;
     font-size: 12px;
     color: #999;
-    .right{
-        span{
-            margin: 0px 5px;
-        }
+    .right {
+      span {
+        margin: 0px 5px;
+        cursor: pointer;
+      }
     }
   }
 }

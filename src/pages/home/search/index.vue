@@ -49,7 +49,7 @@ const goDetail = (item: any) => {
   // console.log('goDetail触发了');
   // 点击建议项跳转到医院详情页，携带query参数，即医院编码 hoscode
   $router.push({
-    path: "/hospital",
+    path: "/hospital/register",
     query: {
       hoscode: item.hoscode,
     },

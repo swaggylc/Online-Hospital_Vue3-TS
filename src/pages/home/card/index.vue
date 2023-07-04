@@ -63,7 +63,7 @@ const goDetail = () => {
   // console.log(props.hospitalInfo.hoscode);
   // 路由跳转
   $router.push({
-    path: "/hospital",
+    path: "/hospital/register",
     query: {
       hoscode: props.hospitalInfo.hoscode,
     },
