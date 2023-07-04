@@ -53,7 +53,11 @@ const changeRegion = (region: string) => {
   // 存储当前点击的地区
   regionFlag.value = region;
   // console.log("region", region);
+  // 触发自定义事件，将当前点击的地区传递给父组件
+  $emit("getRegion", region);
 };
+
+let $emit = defineEmits(["getRegion"]);
 </script>
 
 <style scoped lang="scss">

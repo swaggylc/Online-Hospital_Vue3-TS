@@ -10,9 +10,15 @@ enum API {
   HOSPITALLEVELANDREGION_URL = "/cmn/dict/findByDictCode/",
 }
 // 获取医院的数据
-export const reqHospital = (page: number, limit: number) => {
+export const reqHospital = (
+  page: number,
+  limit: number,
+  hostype = "",
+  districtCode = ""
+) => {
   return request.get<any, HospitalResponseData>(
-    API.HOSPITAL_URL + `/${page}/${limit}`
+    API.HOSPITAL_URL +
+      `/${page}/${limit}?hostype=${hostype}&districtCode=${districtCode}`
   );
 };
 // 获取医院等级及地区的数据

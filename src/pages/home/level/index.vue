@@ -52,7 +52,11 @@ const changeLevel = (level: string) => {
   // 存储当前点击的医院等级
   activeFlag.value = level;
   // console.log("level", level);
+  // 触发自定义事件，将当前点击的医院等级传递给父组件
+  $emit("getLevel", level);
 };
+
+let $emit = defineEmits(["getLevel"]);
 </script>
 
 <style scoped lang="scss">
