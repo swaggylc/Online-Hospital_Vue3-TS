@@ -30,7 +30,7 @@
   flex-direction: column;
   align-items: center;
   .content {
-    margin-top: 70px;
+    margin-top: 80px;
     width: 1200px;
     min-height: 920px;
   }

@@ -2,7 +2,7 @@
   <div class="top">
     <div class="content">
       <!-- 左侧 -->
-      <div class="left">
+      <div class="left" @click="goHome">
         <img src="../../assets/images/ecut.jpg" alt="" />
         <p>ECUT 预约挂号统一平台</p>
       </div>
@@ -14,7 +14,18 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useRouter } from "vue-router";
+const $router = useRouter();
+
+const goHome = () => {
+  console.log("点击了top");
+
+  $router.push({
+    path: "/home",
+  });
+};
+</script>
 
 <style scoped lang="scss">
 .top {
@@ -34,10 +45,12 @@
     justify-content: space-between;
     display: flex;
     align-items: center;
+
     .left {
       display: flex;
       justify-content: center;
       align-items: center;
+      cursor: pointer;
       img {
         width: 50px;
         height: 50px;

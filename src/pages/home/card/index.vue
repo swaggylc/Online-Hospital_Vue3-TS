@@ -1,5 +1,5 @@
 <template>
-  <el-card class="box-card" shadow="hover">
+  <el-card class="box-card" shadow="hover" @click="goDetail">
     <div class="content">
       <div class="left">
         <div class="hospital_name">{{ hospitalInfo.hosname }}</div>
@@ -52,8 +52,23 @@
 </template>
 
 <script setup lang="ts">
+// 引入路由，创建路由实例
+import { useRouter } from "vue-router";
 // 接收父组件传递的数据
-defineProps(["hospitalInfo"]);
+let props = defineProps(["hospitalInfo"]);
+// 创建路由实例
+const $router = useRouter();
+// 点击医院卡片跳转到医院详情页面
+const goDetail = () => {
+  // console.log(props.hospitalInfo.hoscode);
+  // 路由跳转
+  $router.push({
+    path: "/hospital",
+    query: {
+      hoscode: props.hospitalInfo.hoscode,
+    },
+  });
+};
 </script>
 
 <style scoped lang="scss">
