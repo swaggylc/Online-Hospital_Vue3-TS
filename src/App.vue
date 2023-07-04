@@ -14,14 +14,14 @@
 </template>
 
 <script setup lang="ts">
-import request from "@/utils/request";
-import { onMounted } from "vue";
+// import request from "@/utils/request";
+// import { onMounted } from "vue";
 
-onMounted(() => {
-  request.get("/hosp/hospital/1/10").then((res) => {
-    console.log('res',res);
-  });
-});
+// onMounted(() => {
+//   request.get("/hosp/hospital/1/10").then((res) => {
+//     console.log('res',res);
+//   });
+// });
 </script>
 
 <style lang="scss" scoped>

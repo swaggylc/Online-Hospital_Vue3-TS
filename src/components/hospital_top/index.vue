@@ -54,6 +54,7 @@
       align-items: center;
       p {
         font-size: 14px;
+        color: #999;
       }
       .help {
         margin-right: 10px;
