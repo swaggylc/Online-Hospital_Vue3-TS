@@ -90,14 +90,58 @@
       </div>
     </div>
     <!-- 展示医院详细科室 -->
-    
+    <div class="department">
+      <div class="leftNav">
+        <ul>
+          <li
+            v-for="(item, index) in hospitalStore.departmentArr"
+            :key="item.depcode"
+            :class="{ active: index == currentIndex }"
+            @click="changeIndex(index)"
+          >
+            {{ item.depname }}
+          </li>
+        </ul>
+      </div>
+      <div class="rightContent">
+        <!-- 右侧 -->
+        <div
+          class="showDepartment"
+          v-for="item in hospitalStore.departmentArr"
+          :key="item.depcode"
+        >
+          <h4 class="current">{{ item.depname }}</h4>
+          <!-- 展示小科室 -->
+          <ul>
+            <li v-for="department in item.children" :key="department.depcode">
+              {{ department.depname }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 // 引入医院详情的仓库信息
 import useDetailStore from "@/store/modules/hospitalDetail.ts";
 let hospitalStore = useDetailStore();
+// 控制科室高亮的响应式数据
+let currentIndex = ref<number>(0);
+// 左侧导航栏点击事件
+const changeIndex = (index: number) => {
+  currentIndex.value = index;
+  // 点击左侧导航，获取右侧对应的科室的标题
+  let title = document.querySelectorAll(".current");
+  // 滚动到对应的标题
+  title[currentIndex.value].scrollIntoView({
+    behavior: "smooth",   // 平滑滚动
+    block: "start",      // 顶部对齐
+    inline: "nearest",  // 尽可能靠近
+  });
+};
 </script>
 
 <style scoped lang="scss">
@@ -156,6 +200,62 @@ let hospitalStore = useDetailStore();
         }
         span {
           line-height: 25px;
+        }
+      }
+    }
+  }
+  .department {
+    width: 100%;
+    height: 500px;
+    display: flex;
+    margin-top: 50px;
+    .leftNav {
+      width: 80px;
+      height: 100%;
+      ul {
+        width: 100%;
+        height: 100%;
+        background-color: rgb(248, 248, 248);
+        display: flex;
+        flex-direction: column;
+        li {
+          flex: 1;
+          text-align: center;
+          color: #7f7f7f;
+          font-size: 14px;
+          line-height: 41.67px;
+          cursor: pointer;
+          &.active {
+            border-left: 1px solid red;
+            background-color: #fff;
+            color: red;
+          }
+        }
+      }
+    }
+    .rightContent {
+      flex: 1;
+      margin-left: 20px;
+      height: 100%;
+      overflow: auto;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      .showDepartment {
+        h4 {
+          background-color: rgb(248, 248, 248);
+          color: #7f7f7f;
+          font-weight: bold;
+        }
+        ul {
+          display: flex;
+          flex-wrap: wrap;
+          li {
+            width: 33%;
+            color: #7f7f7f;
+            line-height: 30px;
+            cursor: pointer;
+          }
         }
       }
     }

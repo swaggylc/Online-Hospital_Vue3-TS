@@ -41,3 +41,16 @@ export interface HosPitalDetail {
 export interface HospitalDetail extends ResponseData {
   data: HosPitalDetail;
 }
+
+// 代表医院科室数据
+export interface Department {
+  depcode: string;
+  depname: string;
+  children: Array<Department>;
+}
+// 存储科室的数组类型
+export type DepartmentArr = Array<Department>;
+// 获取科室接口返回的ts数据类型
+export interface DepartmentResponseData extends ResponseData {
+  data: DepartmentArr;
+}
