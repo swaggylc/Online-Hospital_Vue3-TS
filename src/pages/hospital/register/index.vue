@@ -113,7 +113,11 @@
           <h4 class="current">{{ item.depname }}</h4>
           <!-- 展示小科室 -->
           <ul>
-            <li v-for="department in item.children" :key="department.depcode">
+            <li
+              v-for="department in item.children"
+              :key="department.depcode"
+              @click="showLogin"
+            >
               {{ department.depname }}
             </li>
           </ul>
@@ -127,6 +131,9 @@
 import { ref } from "vue";
 // 引入医院详情的仓库信息
 import useDetailStore from "@/store/modules/hospitalDetail.ts";
+// 获取user仓库的数据
+import useUserStore from "@/store/modules/user.ts";
+let userStore = useUserStore();
 let hospitalStore = useDetailStore();
 // 控制科室高亮的响应式数据
 let currentIndex = ref<number>(0);
@@ -137,10 +144,14 @@ const changeIndex = (index: number) => {
   let title = document.querySelectorAll(".current");
   // 滚动到对应的标题
   title[currentIndex.value].scrollIntoView({
-    behavior: "smooth",   // 平滑滚动
-    block: "start",      // 顶部对齐
-    inline: "nearest",  // 尽可能靠近
+    behavior: "smooth", // 平滑滚动
+    block: "start", // 顶部对齐
+    inline: "nearest", // 尽可能靠近
   });
+};
+// 点击科室的回调
+const showLogin = () => {
+  userStore.visible = true;
 };
 </script>
 

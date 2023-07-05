@@ -7,6 +7,7 @@ import App from "@/App.vue";
 // 引入全局组件--顶部、底部都是全局组件
 import HospitalTop from "@/components/hospital_top/index.vue";
 import HospitalBottom from "@/components/hospital_bottom/index.vue";
+import Login from "@/components/login/index.vue";
 // 引入vue-router
 import router from "@/router/index.ts";
 // 引入pinia仓库
@@ -23,6 +24,7 @@ import zhCn from "element-plus/dist/locale/zh-cn.mjs";
 const app = createApp(App);
 app.component("HospitalTop", HospitalTop);
 app.component("HospitalBottom", HospitalBottom);
+app.component("Login", Login);
 // 安装vue-router
 app.use(router);
 // 安装pinia仓库

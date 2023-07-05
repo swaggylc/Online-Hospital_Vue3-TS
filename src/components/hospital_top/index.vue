@@ -8,13 +8,16 @@
       </div>
       <div class="right">
         <p class="help">帮助中心</p>
-        <p class="login">登陆/注册</p>
+        <p class="login" @click="login">登陆/注册</p>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+// 获取user仓库的数据
+import useUserStore from "@/store/modules/user.ts";
+let userStore = useUserStore();
 import { useRouter } from "vue-router";
 const $router = useRouter();
 
@@ -25,6 +28,11 @@ const goHome = () => {
     path: "/home",
   });
 };
+// 点击登陆或注册的回调
+const login = () => {
+  userStore.visible = true;
+};
+
 </script>
 
 <style scoped lang="scss">
