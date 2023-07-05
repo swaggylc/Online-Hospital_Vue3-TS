@@ -2,13 +2,15 @@ import { defineStore } from "pinia";
 import { getHospitalDetail } from "@/api/hospital/index.ts";
 // 引入ts类型
 import type { HospitalDetail } from "@/api/hospital/type.ts";
+import type { DetailState } from "./interface/index.ts";
+import type { HosPitalDetail } from "@/api/hospital/type.ts";
 // pinia的写法有两种，组合式API和选项式API
 
 const useDetailStore = defineStore("Detail", {
-  state: () => {
+  state: (): DetailState => {
     return {
       // 定义医院详情数据
-      hospitalInfo: {},
+      hospitalInfo: {} as HosPitalDetail,
     };
   },
   actions: {
