@@ -6,10 +6,7 @@
         <el-icon><House /></el-icon>
         <span> / 医院信息</span>
       </div>
-      <el-menu
-        :default-active="$route.path"
-        class="el-menu-vertical-demo"
-      >
+      <el-menu :default-active="$route.path" class="el-menu-vertical-demo">
         <el-menu-item
           index="/hospital/register"
           @click="changeActive('/hospital/register')"
@@ -71,7 +68,7 @@ import {
   House,
 } from "@element-plus/icons-vue";
 // 引入路由
-import { useRouter,useRoute } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 // 创建路由对象
 const $router = useRouter();
 // 获取当前路由信息
@@ -89,30 +86,8 @@ const changeActive = (path: string) => {
 onMounted(() => {
   // console.log("组件挂载完毕");
   // 发请求
-  detailStore.getHospital($route.query.hoscode);
-
-
-
-
-
-
-
-
-
+  detailStore.getHospital($route.query.hoscode as string);
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
 </script>
 
 <style scoped lang="scss">
@@ -125,6 +100,10 @@ onMounted(() => {
     align-items: center;
     .top {
       color: #999;
+      span {
+        text-align: center;
+        height: 20px;
+      }
     }
   }
   .content {
