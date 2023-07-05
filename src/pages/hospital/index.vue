@@ -79,6 +79,9 @@ const changeActive = (path: string) => {
   // console.log(path);
   $router.push({
     path,
+    query: {
+      hoscode: $route.query.hoscode,
+    },
   });
 };
 
