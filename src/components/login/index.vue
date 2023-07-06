@@ -7,15 +7,15 @@
         <div class="left">
           <div class="login">
             <div v-show="show == 0">
-              <el-form>
-                <el-form-item>
+              <el-form :model="loginParam" :rules="rules">
+                <el-form-item prop="phone">
                   <el-input
                     placeholder="请输入手机号"
                     :prefix-icon="User"
                     v-model="loginParam.phone"
                   ></el-input>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item prop="code">
                   <el-input
                     placeholder="请输入验证码"
                     :prefix-icon="Lock"
@@ -208,6 +208,34 @@ const login = async () => {
       type: "error",
     });
   }
+};
+
+// 表单校验对象
+const rules = {
+  phone: [
+    {
+      required: true, // 必填
+      message: "手机号为十一位数字", // 提示信息
+      trigger: "blur", // 失去焦点时触发
+    },
+    {
+      pattern: /^1[3-9]\d{9}$/, // 正则校验
+      message: "手机号为十一位数字",
+      trigger: "blur", // 失去焦点时触发
+    },
+  ],
+  code: [
+    {
+      required: true, // 必填
+      message: "验证码为六位数字", // 提示信息
+      trigger: "blur", // 失去焦点时触发
+    },
+    {
+      pattern: /^\d{6}$/, // 正则校验
+      message: "验证码为六位数字",
+      trigger: "blur", // 失去焦点时触发
+    },
+  ],
 };
 </script>
 
