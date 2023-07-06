@@ -12,16 +12,20 @@
                   <el-input
                     placeholder="请输入手机号"
                     :prefix-icon="User"
+                    v-model="loginParam.phone"
                   ></el-input>
                 </el-form-item>
                 <el-form-item>
                   <el-input
                     placeholder="请输入验证码"
                     :prefix-icon="Lock"
+                    v-model="loginParam.code"
                   ></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button>获取验证码</el-button>
+                  <el-button :disabled="!isPhone" @click="getCode"
+                    >获取验证码</el-button
+                  >
                 </el-form-item>
               </el-form>
               <el-button style="width: 100%" type="primary">登录</el-button>
@@ -51,7 +55,7 @@
               </div>
             </div>
             <div v-show="show == 1">
-                <p>我是扫一扫登陆</p>
+              <p>我是扫一扫登陆</p>
             </div>
           </div>
         </div>
@@ -124,17 +128,41 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, reactive, computed } from "vue";
 import { User, Lock } from "@element-plus/icons-vue";
 // 获取user仓库的数据
 // @ts-ignore
 import useUserStore from "@/store/modules/user.ts";
 let userStore = useUserStore();
-
 let show = ref<number>(0); // 0:手机号登录 1:扫码登陆
-
 const changeShow = () => {
   show.value = 1;
+};
+
+// 收集表单数据
+let loginParam = reactive({
+  phone: "", // 手机号
+  code: "", // 验证码
+});
+
+// 计算当前的手机号是否是手机号码格式
+let isPhone = computed(() => {
+  // 手机号正则
+  let reg = /^1[3-9]\d{9}$/;
+
+  return reg.test(loginParam.phone);
+});
+// 获取验证码的回调
+const getCode = async () => {
+  // 通知user仓库发送验证码
+  try {
+    // 获取验证码成功
+    await userStore.sendCode(loginParam.phone);
+    loginParam.code = userStore.code;
+  } catch (error) {
+    // 获取验证码失败
+    console.log(error);
+  }
 };
 </script>
 

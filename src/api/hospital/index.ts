@@ -7,6 +7,8 @@ enum API {
   HOSPITALDETAIL_URL = "/hosp/hospital/",
   // 获取医院科室的数据
   HOSPITALDEPARTMENT_URL = "/hosp/hospital/department/",
+  // 获取验证码 
+  GETUSERCODE_URL = "/sms/send/",
 }
 // 获取医院详情的接口
 export const getHospitalDetail = (hoscode: string) => {
@@ -18,3 +20,7 @@ export const getHospitalDepartment = (hoscode: string) => {
     API.HOSPITALDEPARTMENT_URL + hoscode
   );
 };
+// 获取验证码的接口
+export const getUserCode = (phone: string) => {
+  return request.get<any, any>(API.GETUSERCODE_URL + phone);
+}
