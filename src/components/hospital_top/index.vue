@@ -25,7 +25,7 @@
               <el-dropdown-item>实名认证</el-dropdown-item>
               <el-dropdown-item>挂号订单</el-dropdown-item>
               <el-dropdown-item>就诊人管理</el-dropdown-item>
-              <el-dropdown-item>退出登陆</el-dropdown-item>
+              <el-dropdown-item @click="logout">退出登陆</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -36,6 +36,8 @@
 
 <script setup lang="ts">
 import { ArrowDown } from "@element-plus/icons-vue";
+// 引入清除本地存储的token的方法
+import { REMOVE_TOKEN } from "@/utils/user.ts";
 // 获取user仓库的数据
 import useUserStore from "@/store/modules/user.ts";
 let userStore = useUserStore();
@@ -43,8 +45,7 @@ import { useRouter } from "vue-router";
 const $router = useRouter();
 
 const goHome = () => {
-  console.log("点击了top");
-
+  // console.log("点击了top");
   $router.push({
     path: "/home",
   });
@@ -52,6 +53,20 @@ const goHome = () => {
 // 点击登陆或注册的回调
 const login = () => {
   userStore.visible = true;
+};
+// 点击退出登陆的回调
+const logout = () => {
+  // 清空用户信息
+  userStore.userInfo = {
+    name: "",
+    token: "",
+  };
+  // 清空本地存储的用户信息
+  REMOVE_TOKEN();
+  // 跳转到首页
+  $router.push({
+    path: "/home",
+  });
 };
 </script>
 

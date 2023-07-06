@@ -6,3 +6,7 @@ export const SET_TOKEN = (userInfo: string) => {
 export const GET_TOKEN = () => {
   return localStorage.getItem("userInfo");
 };
+// 清除本地存储的用户信息
+export const REMOVE_TOKEN = () => {
+    localStorage.removeItem("userInfo");
+};
