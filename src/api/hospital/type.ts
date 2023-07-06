@@ -54,3 +54,18 @@ export type DepartmentArr = Array<Department>;
 export interface DepartmentResponseData extends ResponseData {
   data: DepartmentArr;
 }
+
+// 登陆接口携带的参数类型
+export interface LoginData {
+  phone: string;
+  code: string;
+}
+// 登陆接口返回的用户信息数据类型
+export interface UserInfo {
+  name: string;
+  token: string;
+}
+// 登录接口返回的ts数据类型
+export interface UserLoginResponseData extends ResponseData {
+  data: UserInfo;
+}

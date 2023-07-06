@@ -33,7 +33,13 @@
                   </el-button>
                 </el-form-item>
               </el-form>
-              <el-button style="width: 100%" type="primary">登录</el-button>
+              <el-button
+                style="width: 100%"
+                type="primary"
+                :disabled="!isPhone || loginParam.code.length != 6"
+                @click="login"
+                >登录</el-button
+              >
               <div class="bottom" @click="changeShow">
                 <p>使用扫一扫登陆</p>
                 <svg
@@ -140,6 +146,7 @@ import Countdown from "@/components/countdown/index.vue";
 // 获取user仓库的数据
 // @ts-ignore
 import useUserStore from "@/store/modules/user.ts";
+import { ElMessage } from "element-plus";
 let userStore = useUserStore();
 // 控制倒计时组件的显示
 let flag = ref<boolean>(false); //true:开启倒计时  false:隐藏
@@ -163,6 +170,7 @@ let isPhone = computed(() => {
 });
 // 获取验证码的回调
 const getCode = async () => {
+  if (!isPhone.value || flag.value) return;
   // 开启倒计时
   flag.value = true;
   // 通知user仓库发送验证码
@@ -181,6 +189,25 @@ const getCode = async () => {
 const getFlag = (value: boolean) => {
   // 隐藏倒计时组件
   flag.value = value;
+};
+
+// 点击登陆的回调
+const login = async () => {
+  // 通知user仓库发送登陆请求
+  // 若登陆成功，关闭弹窗，顶部显示用户信息
+  // 若登陆失败，提示用户登陆失败
+  try {
+    // 登陆成功
+    await userStore.userLogin(loginParam);
+    // 关闭弹窗
+    userStore.visible = false;
+  } catch (error) {
+    // 登陆失败
+    ElMessage({
+      message: (error as Error).message,
+      type: "error",
+    });
+  }
 };
 </script>
 
