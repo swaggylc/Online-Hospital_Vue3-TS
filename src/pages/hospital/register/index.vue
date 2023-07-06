@@ -116,7 +116,7 @@
             <li
               v-for="department in item.children"
               :key="department.depcode"
-              @click="showLogin"
+              @click="showLogin(department)"
             >
               {{ department.depname }}
             </li>
@@ -130,10 +130,15 @@
 <script setup lang="ts">
 import { ref } from "vue";
 // 引入医院详情的仓库信息
+// 引入路由
+import { useRouter, useRoute } from "vue-router";
+// 创建路由对象
+const $router = useRouter();
+const $route = useRoute();
 import useDetailStore from "@/store/modules/hospitalDetail.ts";
 // 获取user仓库的数据
-import useUserStore from "@/store/modules/user.ts";
-let userStore = useUserStore();
+// import useUserStore from "@/store/modules/user.ts";
+// let userStore = useUserStore();
 let hospitalStore = useDetailStore();
 // 控制科室高亮的响应式数据
 let currentIndex = ref<number>(0);
@@ -150,8 +155,21 @@ const changeIndex = (index: number) => {
   });
 };
 // 点击科室的回调
-const showLogin = () => {
-  userStore.visible = true;
+const showLogin = (item: any) => {
+  // userStore.visible = true;
+  // 点击某一个科室，进入到相应的预约挂号的详情页面
+  console.log(item);
+  // 跳转到预约挂号的详情页面
+  // console.log($route.query.hoscode);
+  let hospitalCode = $route.query.hoscode;
+  let departmentCode = item.depcode;
+  $router.push({
+    path: "/hospital/register_step1",
+    query: {
+      hoscode: hospitalCode,
+      depcpde: departmentCode,
+    },
+  });
 };
 </script>
 
