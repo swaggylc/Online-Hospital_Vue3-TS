@@ -23,9 +23,14 @@
                   ></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button :disabled="!isPhone" @click="getCode"
-                    >获取验证码</el-button
-                  >
+                  <el-button :disabled="!isPhone || flag == true">
+                    <Countdown
+                      v-if="flag"
+                      :flag="flag"
+                      @getFlag="getFlag"
+                    ></Countdown>
+                    <span v-else @click="getCode">获取验证码</span>
+                  </el-button>
                 </el-form-item>
               </el-form>
               <el-button style="width: 100%" type="primary">登录</el-button>
@@ -130,10 +135,14 @@
 <script setup lang="ts">
 import { ref, reactive, computed } from "vue";
 import { User, Lock } from "@element-plus/icons-vue";
+// 引入倒计时组件
+import Countdown from "@/components/countdown/index.vue";
 // 获取user仓库的数据
 // @ts-ignore
 import useUserStore from "@/store/modules/user.ts";
 let userStore = useUserStore();
+// 控制倒计时组件的显示
+let flag = ref<boolean>(false); //true:开启倒计时  false:隐藏
 let show = ref<number>(0); // 0:手机号登录 1:扫码登陆
 const changeShow = () => {
   show.value = 1;
@@ -154,6 +163,8 @@ let isPhone = computed(() => {
 });
 // 获取验证码的回调
 const getCode = async () => {
+  // 开启倒计时
+  flag.value = true;
   // 通知user仓库发送验证码
   try {
     // 获取验证码成功
@@ -163,6 +174,13 @@ const getCode = async () => {
     // 获取验证码失败
     console.log(error);
   }
+};
+
+// 子组件绑定的自定义事件
+// 倒计时为0时，子组件隐藏
+const getFlag = (value: boolean) => {
+  // 隐藏倒计时组件
+  flag.value = value;
 };
 </script>
 
