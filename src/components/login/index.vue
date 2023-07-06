@@ -193,6 +193,9 @@ const getFlag = (value: boolean) => {
 
 // 点击登陆的回调
 const login = async () => {
+  // 校验表单数据
+  // await form.value.validate();
+
   // 通知user仓库发送登陆请求
   // 若登陆成功，关闭弹窗，顶部显示用户信息
   // 若登陆失败，提示用户登陆失败
@@ -210,30 +213,63 @@ const login = async () => {
   }
 };
 
+// 手机号的自定义校验
+//@ts-ignore
+const validatorPhone = (rule: any, value: any, callback: any) => {
+  // rule:当前校验的规则
+  // value:当前校验的值
+  // callback:回调函数
+  // 手机号正则
+  let reg = /^1[3-9]\d{9}$/;
+  if (reg.test(value)) {
+    callback(); // 校验成功,放行
+  } else {
+    callback(new Error("请输入正确的手机号码"));
+  }
+};
+// 验证码的自定义校验
+//@ts-ignore
+const validatorCode = (rule: any, value: any, callback: any) => {
+  // 验证码正则
+  let reg = /^\d{6}$/;
+  if (reg.test(value)) {
+    callback(); // 校验成功,放行
+  } else {
+    callback(new Error("请输入正确的验证码"));
+  }
+};
 // 表单校验对象
 const rules = {
   phone: [
+    // {
+    //   required: true, // 必填
+    //   message: "手机号为十一位数字", // 提示信息
+    //   trigger: "blur", // 失去焦点时触发
+    // },
+    // {
+    //   pattern: /^1[3-9]\d{9}$/, // 正则校验
+    //   message: "手机号为十一位数字",
+    //   trigger: "blur", // 失去焦点时触发
+    // },
     {
-      required: true, // 必填
-      message: "手机号为十一位数字", // 提示信息
-      trigger: "blur", // 失去焦点时触发
-    },
-    {
-      pattern: /^1[3-9]\d{9}$/, // 正则校验
-      message: "手机号为十一位数字",
-      trigger: "blur", // 失去焦点时触发
+      trigger: "change",
+      validator: validatorPhone,
     },
   ],
   code: [
+    // {
+    //   required: true, // 必填
+    //   message: "验证码为六位数字", // 提示信息
+    //   trigger: "blur", // 失去焦点时触发
+    // },
+    // {
+    //   pattern: /^\d{6}$/, // 正则校验
+    //   message: "验证码为六位数字",
+    //   trigger: "blur", // 失去焦点时触发
+    // },
     {
-      required: true, // 必填
-      message: "验证码为六位数字", // 提示信息
-      trigger: "blur", // 失去焦点时触发
-    },
-    {
-      pattern: /^\d{6}$/, // 正则校验
-      message: "验证码为六位数字",
-      trigger: "blur", // 失去焦点时触发
+      trigger: "change",
+      validator: validatorCode,
     },
   ],
 };
