@@ -1,13 +1,13 @@
 <template>
   <div class="login_container">
     <!-- v-model控制对话框的显示与隐藏 -->
-    <el-dialog v-model="userStore.visible" title="用户登录">
+    <el-dialog v-model="userStore.visible" title="用户登录" @close="close">
       <!-- 对话框身体部分 -->
       <div class="content">
         <div class="left">
           <div class="login">
             <div v-show="show == 0">
-              <el-form :model="loginParam" :rules="rules">
+              <el-form :model="loginParam" :rules="rules" ref="form">
                 <el-form-item prop="phone">
                   <el-input
                     placeholder="请输入手机号"
@@ -148,6 +148,8 @@ import Countdown from "@/components/countdown/index.vue";
 import useUserStore from "@/store/modules/user.ts";
 import { ElMessage } from "element-plus";
 let userStore = useUserStore();
+// 获取表单实例
+let form = ref<any>();
 // 控制倒计时组件的显示
 let flag = ref<boolean>(false); //true:开启倒计时  false:隐藏
 let show = ref<number>(0); // 0:手机号登录 1:扫码登陆
@@ -272,6 +274,16 @@ const rules = {
       validator: validatorCode,
     },
   ],
+};
+// dialog关闭的回调
+// 重置表单数据
+// 另一种方法，用v-if控制组件的显示和隐藏，隐藏时，组件销毁；显示时，组件重新创建；也能达到重置表单数据的目的
+const close = () => {
+  // 重置表单数据
+  loginParam.phone = "";
+  loginParam.code = "";
+  // 重置表单校验
+  form.value.resetFields();
 };
 </script>
 
