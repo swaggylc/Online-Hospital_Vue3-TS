@@ -98,7 +98,7 @@
                 <span>￥{{ item.amount }}</span>
               </div>
               <div class="btn">
-                <el-button type="primary"
+                <el-button type="primary" @click="handleRegister(item)"
                   >余{{ item.availableNumber }}号</el-button
                 >
               </div>
@@ -154,7 +154,7 @@
                 <span>￥{{ item.amount }}</span>
               </div>
               <div class="btn">
-                <el-button type="primary"
+                <el-button type="primary" @click="handleRegister(item)"
                   >余{{ item.availableNumber }}号</el-button
                 >
               </div>
@@ -175,8 +175,9 @@ import type {
 } from "@/api/hospital/type.ts";
 import { onMounted, ref, watch, computed } from "vue";
 import { getHospitalWork, getHospitalDoctor } from "@/api/hospital/index";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 let $route = useRoute();
+let $router = useRouter();
 
 let pageNo = ref<number>(1); // 当前页
 let limit = ref<number>(6); // 每页显示的条数
@@ -234,7 +235,7 @@ const getDoctorWorkData = async () => {
 
 // 点击日期的回调
 const changeTime = async (item: any) => {
-  console.log(item);
+  // console.log(item);
   workTime.value = item;
   getDoctorWorkData();
 };
@@ -246,6 +247,17 @@ const morningDoc = computed(() => {
 const afterDoc = computed(() => {
   return docArr.value.filter((item: Doctor) => item.workTime == 1);
 });
+// 点击右侧按钮的回调
+const handleRegister = (item: any) => {
+  console.log(item);
+  // 跳转到选择就诊人的页面
+  $router.push({
+    path: "/hospital/register_step2",
+    query: {
+      docId: item.id,
+    },
+  });
+};
 </script>
 
 <style scoped lang="scss">
