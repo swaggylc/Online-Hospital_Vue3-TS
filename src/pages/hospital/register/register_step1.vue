@@ -14,7 +14,11 @@
           class="item"
           v-for="item in workData.bookingScheduleList"
           :key="item"
-          :class="{ active: item.status == -1 || item.availableNumber == -1 }"
+          :class="{
+            active: item.status == -1 || item.availableNumber == -1,
+            current: item.workDate == workTime.workDate,
+          }"
+          @click="changeTime(item)"
         >
           <div class="item_top">{{ item.workDate }} {{ item.dayOfWeek }}</div>
           <div class="item_bottom">
@@ -39,12 +43,12 @@
     <!-- 底部 -->
     <div class="bottom">
       <!-- 即将放号 -->
-      <div class="will">
+      <div class="will" v-if="workTime.status == 1">
         <span>放号时间：</span>
-        <p>{{ workData.baseMap?.releaseTime }}</p>
+        <p>{{ workTime?.workDate }}-{{ workData.baseMap?.releaseTime }}</p>
       </div>
       <!-- 医生结构 -->
-      <div class="doctor">
+      <div class="doctor" v-else>
         <!-- 上午 -->
         <div class="morning">
           <!-- 号源 -->
@@ -73,21 +77,30 @@
             <span>上午号源</span>
           </div>
           <!-- 医生信息 -->
-          <div class="docInfo" v-for="item in 2" :key="item">
+          <div
+            class="docInfo"
+            v-for="item in morningDoc"
+            :key="item.id"
+            v-if="workTime?.status != -1"
+          >
             <div class="info_left">
               <div class="left_top">
-                <span>副主任医师</span>
+                <span>{{ item.title }}</span>
                 <span>|</span>
-                <span>稻草人</span>
+                <span>{{ item.docname }}</span>
               </div>
               <div class="left_bottom">
-                <span>内分泌科常见病</span>
+                <span>{{ item.skill }}</span>
               </div>
             </div>
             <div class="info_right">
-              <div class="price"><span>￥100</span></div>
+              <div class="price">
+                <span>￥{{ item.amount }}</span>
+              </div>
               <div class="btn">
-                <el-button type="primary">预约</el-button>
+                <el-button type="primary"
+                  >余{{ item.availableNumber }}号</el-button
+                >
               </div>
             </div>
           </div>
@@ -120,21 +133,30 @@
             <span>下午号源</span>
           </div>
           <!-- 医生信息 -->
-          <div class="docInfo">
+          <div
+            class="docInfo"
+            v-for="item in afterDoc"
+            :key="item.id"
+            v-if="workTime?.status != -1"
+          >
             <div class="info_left">
               <div class="left_top">
-                <span>副主任医师</span>
+                <span>{{ item.title }}</span>
                 <span>|</span>
-                <span>稻草人</span>
+                <span>{{ item.docname }}</span>
               </div>
               <div class="left_bottom">
-                <span>内分泌科常见病</span>
+                <span>{{ item.skill }}</span>
               </div>
             </div>
             <div class="info_right">
-              <div class="price"><span>￥100</span></div>
+              <div class="price">
+                <span>￥{{ item.amount }}</span>
+              </div>
               <div class="btn">
-                <el-button type="primary">预约</el-button>
+                <el-button type="primary"
+                  >余{{ item.availableNumber }}号</el-button
+                >
               </div>
             </div>
           </div>
@@ -145,15 +167,23 @@
 </template>
 
 <script setup lang="ts">
-import type { HospitalWorkData } from "@/api/hospital/type.ts";
-import { onMounted, ref, watch } from "vue";
-import { getHospitalWork } from "@/api/hospital/index";
+import type {
+  HospitalWorkData,
+  DoctorResponseData,
+  DocArr,
+  Doctor,
+} from "@/api/hospital/type.ts";
+import { onMounted, ref, watch, computed } from "vue";
+import { getHospitalWork, getHospitalDoctor } from "@/api/hospital/index";
 import { useRoute } from "vue-router";
 let $route = useRoute();
 
 let pageNo = ref<number>(1); // 当前页
 let limit = ref<number>(6); // 每页显示的条数
-let workData = ref<any>({});
+let workData = ref<any>({}); // 存储挂号的数据
+let docArr = ref<DocArr>([]);
+// 存储排排班数据
+let workTime = ref<any>({});
 
 onMounted(() => {
   fetchWorkData();
@@ -171,6 +201,10 @@ const fetchWorkData = async () => {
   // console.log("预约挂号数据", res);
   if (res.code === 200) {
     workData.value = res.data;
+    // 存储第一天日期的数据
+    workTime.value = res.data.bookingScheduleList[0];
+    // 获取第一天的排班数据
+    getDoctorWorkData();
   }
 };
 // 点击分页的回调
@@ -182,6 +216,35 @@ const fetchWorkData = async () => {
 watch(pageNo, (newVal, oldVal) => {
   console.log(newVal, oldVal);
   fetchWorkData();
+});
+
+// 获取某天的排班数据
+const getDoctorWorkData = async () => {
+  // 获取医生的排班数据
+  let res: DoctorResponseData = await getHospitalDoctor(
+    $route.query.hoscode as string,
+    $route.query.depcpde as string,
+    workTime.value.workDate
+  );
+  console.log("医生的排班数据", res);
+  if (res.code === 200) {
+    docArr.value = res.data;
+  }
+};
+
+// 点击日期的回调
+const changeTime = async (item: any) => {
+  console.log(item);
+  workTime.value = item;
+  getDoctorWorkData();
+};
+// 计算上午排班的医生数据
+const morningDoc = computed(() => {
+  return docArr.value.filter((item: Doctor) => item.workTime == 0);
+});
+// 计算下午排班的医生数据
+const afterDoc = computed(() => {
+  return docArr.value.filter((item: Doctor) => item.workTime == 1);
 });
 </script>
 
@@ -220,16 +283,22 @@ watch(pageNo, (newVal, oldVal) => {
       .item {
         flex: 1;
         border: 1px solid skyblue;
-        margin: 0 5px;
+        margin: 0 8px;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        transition: all 0.5s;
+        cursor: pointer;
+
         &.active {
           border: 1px solid #ccc;
           color: #ccc;
           .item_top {
             background-color: #ccc;
           }
+        }
+        &.current {
+          transform: scale(1.1);
         }
         .item_top {
           height: 30px;
