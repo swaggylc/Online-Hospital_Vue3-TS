@@ -2,8 +2,8 @@
   <div class="container">
     <div class="top">
       <div class="left">
-        <div class="type">医保</div>
-        <div class="name">张三</div>
+        <div class="type">{{ props.user.isInsure == 1 ? "医保" : "自费" }}</div>
+        <div class="name">{{ props.user.name }}</div>
       </div>
       <div class="right">
         <el-button type="primary" :icon="Edit" circle />
@@ -21,14 +21,18 @@
         <span>详细住址：</span>
       </div>
       <div class="c_right">
-        <span>身份证</span>
-        <span>362203333333333333</span>
-        <span>男</span>
-        <span>2001-01-01</span>
-        <span>15111111111</span>
-        <span>未婚</span>
-        <span>江西省宜春市</span>
-        <span>江西省宜春市xxxxxxx</span>
+        <span>{{ props.user.param.certificatesTypeString }}</span>
+        <span>{{ props.user.contactsCertificatesNo }}</span>
+        <span>{{ props.user.sex == 1 ? "男" : "女" }}</span>
+        <span>{{ props.user.birthdate }}</span>
+        <span>{{ props.user.phone }}</span>
+        <span>{{ props.user.isMarry == 1 ? "已婚" : "未婚" }}</span>
+        <span
+          >{{ props.user.param.provinceString }}-{{
+            props.user.param.districtString
+          }}</span
+        >
+        <span>{{ props.user.address }}</span>
       </div>
     </div>
   </div>
@@ -36,13 +40,14 @@
 
 <script setup lang="ts">
 import { Edit } from "@element-plus/icons-vue";
+let props = defineProps(["user"]);
 </script>
 
 <style scoped lang="scss">
 .container {
   border: 1px solid #e8e8e8;
   border-radius: 5px;
-  height: 400px;
+  height: 450px;
   box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.25);
   .top {
     height: 20%;
@@ -76,12 +81,13 @@ import { Edit } from "@element-plus/icons-vue";
     padding: 15px;
     display: flex;
     .c_left {
+      display: flex;
+      flex-direction: column;
       span {
-        display: flex;
-        flex-direction: column;
         line-height: 25px;
         margin-top: 10px;
         margin-left: 5px;
+        width: 80px;
       }
     }
     .c_right {

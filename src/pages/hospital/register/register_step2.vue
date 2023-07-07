@@ -14,7 +14,12 @@
       </template>
       <!-- 展示就诊人信息 -->
       <div class="user">
-        <visitor v-for="item in 4" :key="item" class="item"></visitor>
+        <visitor
+          v-for="item in userArr"
+          :key="item.id"
+          class="item"
+          :user="item"
+        ></visitor>
       </div>
     </el-card>
     <!-- 挂号详细信息 -->
@@ -83,6 +88,24 @@
 <script setup lang="ts">
 import { Pointer } from "@element-plus/icons-vue";
 import visitor from "./visitor.vue";
+// 引入获取就诊人信息的接口
+import { getUser } from "@/api/hospital/index.ts";
+import { onMounted, ref } from "vue";
+import type { UserResponseData, UserArr } from "@/api/hospital/type.ts";
+
+// 存储就诊人信息
+let userArr = ref<UserArr>([]);
+
+onMounted(() => {
+  fetchUserData();
+});
+// 获取就诊人信息
+const fetchUserData = async () => {
+  let res: UserResponseData = await getUser();
+  if (res.code === 200) {
+    userArr.value = res.data;
+  }
+};
 </script>
 
 <style scoped lang="scss">

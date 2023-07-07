@@ -127,3 +127,44 @@ export type DocArr = Array<Doctor>;
 export interface DoctorResponseData extends ResponseData {
   data: DocArr;
 }
+
+// 一个就诊人数据
+export interface User {
+  id: string;
+  createTime: string;
+  updateTime: string;
+  isDeleted: number;
+  param: {
+    certificatesTypeString: string;
+    contactsCertificatesTypeString: string;
+    cityString: null;
+    fullAddress: string;
+    districtString: null;
+    provinceString: null;
+  };
+  userId: string;
+  name: string;
+  certificatesType: string;
+  certificatesNo: string;
+  sex: number;
+  birthdate: string;
+  phone: string;
+  isMarry: number;
+  provinceCode: null;
+  cityCode: null;
+  districtCode: null;
+  address: string;
+  contactsName: string;
+  contactsCertificatesType: string;
+  contactsCertificatesNo: string;
+  contactsPhone: string;
+  isInsure: number;
+  cardNo: null;
+  status: string;
+}
+export type UserArr = Array<User>;
+
+// 获取就诊人接口返回的ts数据类型
+export interface UserResponseData extends ResponseData {
+  data: UserArr;
+}
