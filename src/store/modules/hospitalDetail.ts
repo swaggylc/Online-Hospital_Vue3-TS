@@ -34,7 +34,7 @@ const useDetailStore = defineStore("Detail", {
     // 获取医院科室的方法
     async getDepartment(hoscode: string) {
       let result: DepartmentResponseData = await getHospitalDepartment(hoscode);
-      console.log("单个医院的科室数据", result);
+      // console.log("单个医院的科室数据", result);
       if (result.code == 200) {
         this.departmentArr = result.data;
       }

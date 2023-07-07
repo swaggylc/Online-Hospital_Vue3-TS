@@ -158,7 +158,7 @@ const changeIndex = (index: number) => {
 const showLogin = (item: any) => {
   // userStore.visible = true;
   // 点击某一个科室，进入到相应的预约挂号的详情页面
-  console.log(item);
+  // console.log(item);
   // 跳转到预约挂号的详情页面
   // console.log($route.query.hoscode);
   let hospitalCode = $route.query.hoscode;

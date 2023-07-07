@@ -69,3 +69,30 @@ export interface UserInfo {
 export interface UserLoginResponseData extends ResponseData {
   data: UserInfo;
 }
+
+export interface BaseMap {
+  warkDataString: string;
+  releaseTime: string;
+  bigname: string;
+  stopTime: string;
+  depname: string;
+  hosname: string;
+}
+export interface WorkData {
+  workDate: string;
+  workDateMd: string;
+  dayOfWeek: string;
+  docCount: number;
+  reservedNumber: null;
+  availableNumber: number;
+  status: number;
+}
+export type BookingScheduleList = Array<WorkData>;
+
+export interface HospitalWorkData extends ResponseData {
+  data: {
+    total: number;
+    bookingScheduleList: BookingScheduleList;
+    baseMap: BaseMap;
+  };
+}
