@@ -34,13 +34,17 @@
         >
         <span>{{ props.user.address }}</span>
       </div>
+      <!-- 红色已选择的盒子 -->
+      <transition name="sure">
+        <div class="sure" v-if="props.index == props.userIndex">已选择</div>
+      </transition>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { Edit } from "@element-plus/icons-vue";
-let props = defineProps(["user"]);
+let props = defineProps(["user", "index", "userIndex"]);
 </script>
 
 <style scoped lang="scss">
@@ -78,6 +82,7 @@ let props = defineProps(["user"]);
     }
   }
   .content {
+    position: relative;
     padding: 15px;
     display: flex;
     .c_left {
@@ -99,6 +104,32 @@ let props = defineProps(["user"]);
         font-size: 15px;
         color: #7f7f7f;
       }
+    }
+    .sure {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      color: red;
+      border-radius: 50%;
+      border: 1px dashed red;
+      text-align: center;
+      line-height: 200px;
+      font-size: 24px;
+      transform: rotate(45deg);
+      top: 50%;
+      left: 50%;
+      margin-left: -100px;
+      margin-top: -100px;
+      opacity: 0.6;
+    }
+    .sure-enter-from {
+      transform: scale(1);
+    }
+    .sure-enter-active {
+      transition: all 0.5s;
+    }
+    .sure-enter-to {
+      transform: scale(1.2);
     }
   }
 }

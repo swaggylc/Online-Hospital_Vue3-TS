@@ -15,10 +15,13 @@
       <!-- 展示就诊人信息 -->
       <div class="user">
         <visitor
-          v-for="item in userArr"
+          v-for="(item, index) in userArr"
           :key="item.id"
           class="item"
           :user="item"
+          @click="getUserIndex(index)"
+          :index="index"
+          :userIndex="userIndex"
         ></visitor>
       </div>
     </el-card>
@@ -78,7 +81,11 @@
     </el-card>
     <!-- 按钮 -->
     <div class="btn">
-      <el-button type="primary" size="large" :icon="Pointer"
+      <el-button
+        type="primary"
+        size="large"
+        :icon="Pointer"
+        :disabled="userIndex == -1"
         >确认挂号</el-button
       >
     </div>
@@ -102,6 +109,8 @@ const $route = useRoute();
 let userArr = ref<UserArr>([]);
 // 存储医生信息
 let doctorInfo = ref<any>({});
+// 存储确定就诊人的索引值
+let userIndex = ref<number>(-1);
 
 onMounted(() => {
   console.log($route.query);
@@ -124,6 +133,11 @@ const fetchDoctorData = async () => {
   if (res.code === 200) {
     doctorInfo.value = res.data;
   }
+};
+// 选择就诊人的回调
+const getUserIndex = (index: number) => {
+  // console.log(index);
+  userIndex.value = index;
 };
 </script>
 
