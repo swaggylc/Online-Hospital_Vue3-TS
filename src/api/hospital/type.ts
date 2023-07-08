@@ -168,3 +168,8 @@ export type UserArr = Array<User>;
 export interface UserResponseData extends ResponseData {
   data: UserArr;
 }
+
+// 获取某个挂号医生的排班信息
+export interface DoctorInfoData extends ResponseData {
+  data: Doctor;
+}

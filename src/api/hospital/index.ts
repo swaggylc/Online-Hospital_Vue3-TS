@@ -9,6 +9,7 @@ import type {
   HospitalWorkData,
   DoctorResponseData,
   UserResponseData,
+  DoctorInfoData,
 } from "./type";
 // 枚举请求地址
 enum API {
@@ -25,6 +26,8 @@ enum API {
   HOSPITALDOCTOR_URL = "/hosp/hospital/auth/findScheduleList/",
   // 获取某一账号下的就诊人列表
   GETUSER_URL = "/user/patient/auth/findAll",
+  // 获取挂号医生的信息
+  GETDOCTOR_URL = "/hosp/hospital/getSchedule/",
 }
 // 获取医院详情的接口
 export const getHospitalDetail = (hoscode: string) => {
@@ -68,4 +71,8 @@ export const getHospitalDoctor = (
 // 获取某一账号下的就诊人列表
 export const getUser = () => {
   return request.get<any, UserResponseData>(API.GETUSER_URL);
+};
+// 获取挂号医生的信息
+export const getDoctor = (scheduleId: string) => {
+  return request.get<any, DoctorInfoData>(API.GETDOCTOR_URL + scheduleId);
 };

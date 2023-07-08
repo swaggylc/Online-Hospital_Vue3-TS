@@ -36,43 +36,43 @@
           <template #label>
             <div class="cell-item">就诊日期：</div>
           </template>
-          2023-01-01
+          {{ doctorInfo.workDate }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
             <div class="cell-item">就诊医院：</div>
           </template>
-          北京人民医院
+          {{ doctorInfo.param?.hosname }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
             <div class="cell-item">就诊科室</div>
           </template>
-          多发性骨髓瘤科
+          {{ doctorInfo.param?.depname }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
             <div class="cell-item">医生姓名：</div>
           </template>
-          邵红红
+          {{ doctorInfo.docname }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
             <div class="cell-item">医生职称：</div>
           </template>
-          副主任医师
+          {{ doctorInfo.title }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
             <div class="cell-item">医生专长：</div>
           </template>
-          内分泌与代谢性疾病
+          {{ doctorInfo.skill }}
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
             <div class="cell-item">医事服务费：</div>
           </template>
-          <span style="color: red">100</span>
+          <span style="color: red">{{ doctorInfo.amount }}</span>
         </el-descriptions-item>
       </el-descriptions>
     </el-card>
@@ -89,21 +89,40 @@
 import { Pointer } from "@element-plus/icons-vue";
 import visitor from "./visitor.vue";
 // 引入获取就诊人信息的接口
-import { getUser } from "@/api/hospital/index.ts";
+import { getUser, getDoctor } from "@/api/hospital/index.ts";
 import { onMounted, ref } from "vue";
-import type { UserResponseData, UserArr } from "@/api/hospital/type.ts";
-
+import type {
+  UserResponseData,
+  UserArr,
+  DoctorInfoData,
+} from "@/api/hospital/type.ts";
+import { useRoute } from "vue-router";
+const $route = useRoute();
 // 存储就诊人信息
 let userArr = ref<UserArr>([]);
+// 存储医生信息
+let doctorInfo = ref<any>({});
 
 onMounted(() => {
+  console.log($route.query);
+
+  // 获取就诊人信息
   fetchUserData();
+  // 获取医生信息
+  fetchDoctorData();
 });
 // 获取就诊人信息
 const fetchUserData = async () => {
   let res: UserResponseData = await getUser();
   if (res.code === 200) {
     userArr.value = res.data;
+  }
+};
+// 获取医生信息
+const fetchDoctorData = async () => {
+  let res: DoctorInfoData = await getDoctor($route.query.docId as string);
+  if (res.code === 200) {
+    doctorInfo.value = res.data;
   }
 };
 </script>
