@@ -86,6 +86,7 @@
         size="large"
         :icon="Pointer"
         :disabled="userIndex == -1"
+        @click="confirmRegister()"
         >确认挂号</el-button
       >
     </div>
@@ -97,14 +98,19 @@ import { Pointer } from "@element-plus/icons-vue";
 import visitor from "./visitor.vue";
 // 引入获取就诊人信息的接口
 import { getUser, getDoctor } from "@/api/hospital/index.ts";
+// 引入创建订单的接口
+import { createOrder } from "@/api/user/index.ts";
 import { onMounted, ref } from "vue";
 import type {
   UserResponseData,
   UserArr,
   DoctorInfoData,
 } from "@/api/hospital/type.ts";
-import { useRoute } from "vue-router";
+import type { CreateOrderResponseData } from "@/api/user/type.ts";
+import { useRoute, useRouter } from "vue-router";
+import { ElMessage } from "element-plus";
 const $route = useRoute();
+const $router = useRouter();
 // 存储就诊人信息
 let userArr = ref<UserArr>([]);
 // 存储医生信息
@@ -113,7 +119,7 @@ let doctorInfo = ref<any>({});
 let userIndex = ref<number>(-1);
 
 onMounted(() => {
-  console.log($route.query);
+  // console.log($route.query);
 
   // 获取就诊人信息
   fetchUserData();
@@ -138,6 +144,36 @@ const fetchDoctorData = async () => {
 const getUserIndex = (index: number) => {
   // console.log(index);
   userIndex.value = index;
+};
+
+// 点击确认挂号的回调
+const confirmRegister = async () => {
+  // console.log("确认挂号");
+  let hoscode: string = doctorInfo.value.hoscode;
+  let scheduleId: string = doctorInfo.value.id;
+  let patientId = userArr.value[userIndex.value].id;
+  // console.log(hoscode, scheduleId, patientId);
+  // 创建订单
+
+  let res: CreateOrderResponseData = await createOrder(
+    hoscode,
+    scheduleId,
+    //@ts-ignore
+    patientId as number
+  );
+  // console.log("订单编号：", res);
+  if (res.code === 200) {
+    // 跳转到挂号详情页面
+    $router.push({
+      path: "/user/orders",
+      query: {
+        orderNo: res.data,
+      },
+    });
+  } else {
+    // 提示错误信息
+    ElMessage.error(res.message);
+  }
 };
 </script>
 
