@@ -47,7 +47,33 @@ export default createRouter({
           path: "register_step2",
           component: () =>
             import("@/pages/hospital/register/register_step2.vue"),
-        }
+        },
+      ],
+    },
+    {
+      path: "/user",
+      component: () => import("@/pages/user/index.vue"),
+      children: [
+        {
+          path: "certified",
+          component: () => import("@/pages/user/certified/index.vue"),
+        },
+        {
+          path: "orders",
+          component: () => import("@/pages/user/orders/index.vue"),
+        },
+        {
+          path: "visitor_manage",
+          component: () => import("@/pages/user/visitor_manage/index.vue"),
+        },
+        {
+          path: "account",
+          component: () => import("@/pages/user/account/index.vue"),
+        },
+        {
+          path: "opinion",
+          component: () => import("@/pages/user/opinion/index.vue"),
+        },
       ],
     },
   ],
