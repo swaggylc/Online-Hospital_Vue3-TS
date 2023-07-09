@@ -7,22 +7,13 @@
       <template #header>
         <div class="card-header">
           <span>请选择就诊人</span>
-          <el-button type="primary" size="default" :icon="Pointer"
-            >添加就诊人</el-button
-          >
+          <el-button type="primary" size="default" :icon="Pointer">添加就诊人</el-button>
         </div>
       </template>
       <!-- 展示就诊人信息 -->
       <div class="user">
-        <visitor
-          v-for="(item, index) in userArr"
-          :key="item.id"
-          class="item"
-          :user="item"
-          @click="getUserIndex(index)"
-          :index="index"
-          :userIndex="userIndex"
-        ></visitor>
+        <visitor v-for="(item, index) in userArr" :key="item.id" class="item" :user="item" @click="getUserIndex(index)"
+          :index="index" :userIndex="userIndex"></visitor>
       </div>
     </el-card>
     <!-- 挂号详细信息 -->
@@ -81,14 +72,8 @@
     </el-card>
     <!-- 按钮 -->
     <div class="btn">
-      <el-button
-        type="primary"
-        size="large"
-        :icon="Pointer"
-        :disabled="userIndex == -1"
-        @click="confirmRegister()"
-        >确认挂号</el-button
-      >
+      <el-button type="primary" size="large" :icon="Pointer" :disabled="userIndex == -1"
+        @click="confirmRegister()">确认挂号</el-button>
     </div>
   </div>
 </template>
@@ -161,7 +146,7 @@ const confirmRegister = async () => {
     //@ts-ignore
     patientId as number
   );
-  // console.log("订单编号：", res);
+  console.log("订单编号：", res);
   if (res.code === 200) {
     // 跳转到挂号详情页面
     $router.push({
@@ -184,22 +169,27 @@ const confirmRegister = async () => {
     font-weight: bold;
     margin: 20px;
   }
+
   .box-card {
     margin-bottom: 25px;
+
     .card-header {
       display: flex;
       justify-content: space-between;
       line-height: 32px;
     }
+
     .user {
       display: flex;
       flex-wrap: wrap;
+
       .item {
         width: 31%;
         margin: 10px;
       }
     }
   }
+
   .btn {
     display: flex;
     justify-content: center;

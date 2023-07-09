@@ -1,5 +1,7 @@
 // Vue 3框架提供的CreateApp函数，用于创建Vue实例
 import { createApp } from "vue";
+// 引入mock
+import "@/mock/index.js";
 // 引入清除默认样式
 import "@/style/reset.scss";
 // 引入根组件App

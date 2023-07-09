@@ -195,7 +195,7 @@ const getHospitalInfo = async () => {
     hostype.value,
     districtCode.value
   );
-  console.log("result", result);
+  // console.log("result", result);
 
   if (result.code === 200) {
     // 存储医院列表数据

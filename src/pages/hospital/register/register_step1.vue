@@ -214,8 +214,9 @@ const fetchWorkData = async () => {
 //   fetchWorkData();
 // };
 // 监视页码的变化
+//@ts-ignore
 watch(pageNo, (newVal, oldVal) => {
-  console.log(newVal, oldVal);
+  // console.log(newVal, oldVal);
   fetchWorkData();
 });
 
@@ -249,7 +250,7 @@ const afterDoc = computed(() => {
 });
 // 点击右侧按钮的回调
 const handleRegister = (item: any) => {
-  console.log(item);
+  // console.log(item);
   // 跳转到选择就诊人的页面
   $router.push({
     path: "/hospital/register_step2",

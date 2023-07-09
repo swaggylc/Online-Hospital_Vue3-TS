@@ -9,7 +9,7 @@
     <div class="top">
       <el-tag class="ml-2" type="success">
         <span>✔ </span>
-        <span>预约成功，待支付</span>
+        <span>{{ orderInfo.param?.orderStatusString }}</span>
       </el-tag>
       <div class="right">
         <img src="../../../../assets/images/code_login_wechat.png" alt="" />
@@ -36,49 +36,49 @@
             <template #label>
               <div class="cell-item">就诊人信息</div>
             </template>
-            张三
+            {{ orderInfo.patientName }}
           </el-descriptions-item>
           <el-descriptions-item>
             <template #label>
               <div class="cell-item">就诊日期</div>
             </template>
-            2023-7-7-15:30
+            {{ orderInfo.reserveDate }}-{{ orderInfo.reserveTime }}
           </el-descriptions-item>
           <el-descriptions-item>
             <template #label>
               <div class="cell-item">就诊医院</div>
             </template>
-            北京人民医院
+            {{ orderInfo.hosname }}
           </el-descriptions-item>
           <el-descriptions-item>
             <template #label>
               <div class="cell-item">就诊科室</div>
             </template>
-            多发性骨髓瘤科
+            {{ orderInfo.depname }}
           </el-descriptions-item>
           <el-descriptions-item>
             <template #label>
               <div class="cell-item">医生职称</div>
             </template>
-            副主任医师
+            {{ orderInfo.title }}
           </el-descriptions-item>
           <el-descriptions-item>
             <template #label>
               <div class="cell-item">医事服务费</div>
             </template>
-            100元
+            <span style="color: red;">{{ orderInfo.amount }}</span>
           </el-descriptions-item>
           <el-descriptions-item>
             <template #label>
               <div class="cell-item">挂号订单</div>
             </template>
-            1000100010001
+            {{ orderInfo.outTradeNo }}
           </el-descriptions-item>
           <el-descriptions-item>
             <template #label>
               <div class="cell-item">挂号时间</div>
             </template>
-            2023-7-6-16:00
+            {{ orderInfo.createTime }}
           </el-descriptions-item>
         </el-descriptions>
         <div class="btn">
@@ -96,8 +96,8 @@
           <!-- 卡片身体 -->
           <div class="notice">
             <span>1、请确认就诊人信息是否填写准确，若填写错误将无法取号就诊，损失由本人承担；</span>
-            <span style="color: red">2、【取号】就诊当天需在09：00前在医院取号，未取号视为爽约，该号不退不换；</span>
-            <span>3、【退号】在就诊前一天15：30前可在线退号，逾期不可办理退号、退费；</span>
+            <span style="color: red">2、【取号】就诊需在{{ orderInfo.fetchTime }}前在医院取号，未取号视为爽约，该号不退不换；</span>
+            <span>3、【退号】在{{ orderInfo.quitTime }}前可在线退号，逾期不可办理退号、退费；</span>
             <span>4、北京114预约挂号支持自费患者使用身份证预约，同时支持北京市医保患者使用北京社保卡在平台预约挂号。请于就诊当日，携带预约挂号所使用的有效身份证件到院取号</span>
             <span>5、请注意北京市医保患者在住院期间不能使用社保卡在门诊取号。</span>
           </div>
@@ -114,8 +114,9 @@ import { getOrderInfo } from "@/api/user/index.ts";
 // 引入ts类型
 import type { GetOrderInfoResponseData } from "@/api/user/type.ts";
 // 引入路由
-import { useRouter, useRoute } from "vue-router";
-let $router = useRouter();
+import { useRoute } from "vue-router";
+
+// let $router = useRouter();
 let $route = useRoute();
 // 存储订单详情的数据
 let orderInfo = ref<any>({})
@@ -133,7 +134,7 @@ const getOrderInfoFn = async () => {
   let id = $route.query.orderNo as unknown;
   // console.log(id);
   let res: GetOrderInfoResponseData = await getOrderInfo(id as number);
-  // console.log(res.data);
+  console.log(res);
   if (res.code === 200) {
     orderInfo.value = res.data
   }
