@@ -56,3 +56,24 @@ export interface GetQrCodeResponseData extends ResponseData {
 export interface QueryPayStatusResponseData extends ResponseData {
   data: boolean;
 }
+// 用户信息的数据类型
+export interface UserInfoData {
+  id: number;
+  createTime: string;
+  updateTime: string;
+  isDeleted: number;
+  param: {};
+  openid: null;
+  nickName: null;
+  phone: string;
+  name: string;
+  status: number;
+  certificatesType: string;
+  certificatesNo: string;
+  certificatesUrl: null;
+  authStatus: number;
+}
+// 获取用户信息接口返回的数据类型
+export interface GetUserInfoResponseData extends ResponseData {
+  data: UserInfoData;
+}

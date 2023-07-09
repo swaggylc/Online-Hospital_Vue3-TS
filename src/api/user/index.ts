@@ -5,7 +5,8 @@ import {
   CreateOrderResponseData,
   GetOrderInfoResponseData,
   GetQrCodeResponseData,
-  QueryPayStatusResponseData
+  QueryPayStatusResponseData,
+  GetUserInfoResponseData,
 } from "@/api/user/type.ts";
 
 // 枚举请求地址
@@ -20,6 +21,8 @@ enum API {
   QRCODE_URL = "/order/weixin/createNative/",
   // 查询订单支付状态的接口
   QUERY_PAY_STATUS_URL = "/order/weixin/queryPayStatus/",
+  // 获取用户信息的接口
+  GET_USER_INFO_URL = "/user/auth/getUserInfo",
 }
 // 提交订单
 export const createOrder = (
@@ -45,5 +48,11 @@ export const getQrCode = (orderId: number) => {
 };
 // 查询订单支付状态的方法
 export const queryPayStatus = (orderId: number) => {
-  return request.get<any,QueryPayStatusResponseData>(API.QUERY_PAY_STATUS_URL + orderId);
+  return request.get<any, QueryPayStatusResponseData>(
+    API.QUERY_PAY_STATUS_URL + orderId
+  );
+};
+// 获取用户信息的方法
+export const getUserInfo = () => {
+  return request.get<any, GetUserInfoResponseData>(API.GET_USER_INFO_URL);
 };

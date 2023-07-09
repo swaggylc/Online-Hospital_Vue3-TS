@@ -15,7 +15,7 @@
             </span>
         </div>
         <!-- 卡片身体：认证成功 / 未认证 -->
-        <div class="success" v-if="false">
+        <div class="success" v-if="userInfo?.authStatus == 1">
             <el-descriptions class="margin-top" title="用户信息" :column="1" border>
                 <el-descriptions-item label-align="center" width="50">
                     <template #label>
@@ -23,7 +23,7 @@
                             用户姓名
                         </div>
                     </template>
-                    王稳健
+                    {{ userInfo.name }}
                 </el-descriptions-item>
                 <el-descriptions-item label-align="center" width="50">
                     <template #label>
@@ -31,7 +31,7 @@
                             证件类型
                         </div>
                     </template>
-                    身份证
+                    {{ userInfo.certificatesType == 10 ? '身份证' : '户口本' }}
                 </el-descriptions-item>
                 <el-descriptions-item label-align="center" width="50">
                     <template #label>
@@ -39,11 +39,11 @@
                             证件号码
                         </div>
                     </template>
-                    320***********0000
+                    {{userInfo.certificatesNo}}
                 </el-descriptions-item>
             </el-descriptions>
         </div>
-        <div class="fail">
+        <div class="fail" v-else>
             <el-form style="width: 60%; margin: 20px auto;" label-width="80px">
                 <el-form-item label="用户姓名">
                     <el-input placeholder="请输入用户姓名"></el-input>
@@ -73,6 +73,35 @@
 
 <script setup lang="ts">
 import { InfoFilled } from '@element-plus/icons-vue'
+import { onMounted, ref } from 'vue';
+import { getUserInfo } from '@/api/user/index.ts'
+import type { GetUserInfoResponseData } from '@/api/user/type.ts'
+
+// 存储用户信息
+const userInfo: any = ref<GetUserInfoResponseData>()
+
+
+onMounted(() => {
+    getUserInfoMethod()
+})
+
+
+// 获取用户信息的方法
+const getUserInfoMethod = async () => {
+    let res: GetUserInfoResponseData = await getUserInfo()
+    if (res.code === 200) {
+        //@ts-ignore
+        userInfo.value = res.data
+    }
+}
+
+
+
+
+
+
+
+
 </script>
 
 <style scoped lang="scss">
