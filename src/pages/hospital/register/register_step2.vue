@@ -146,7 +146,7 @@ const confirmRegister = async () => {
     //@ts-ignore
     patientId as number
   );
-  console.log("订单编号：", res);
+  // console.log("订单编号：", res);
   if (res.code === 200) {
     // 跳转到挂号详情页面
     $router.push({

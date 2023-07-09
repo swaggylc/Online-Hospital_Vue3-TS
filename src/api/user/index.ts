@@ -12,6 +12,8 @@ enum API {
   CREATEORDER_URL = "/order/orderInfo/auth/submitOrder/",
   // 获取订单详情的数据
   GETORDERINFO_URL = "/order/orderInfo/auth/getOrderInfo/",
+  // 取消订单的接口
+  CANCELORDER_URL = "/order/orderInfo/auth/cancelOrder/",
 }
 // 提交订单
 export const createOrder = (
@@ -26,4 +28,8 @@ export const createOrder = (
 // 获取订单详情的方法
 export const getOrderInfo = (id: number) => {
   return request.get<any, GetOrderInfoResponseData>(API.GETORDERINFO_URL + id);
+};
+// 取消订单的方法
+export const cancelOrder = (orderId: number) => {
+  return request.get<any>(API.CANCELORDER_URL + orderId);
 };

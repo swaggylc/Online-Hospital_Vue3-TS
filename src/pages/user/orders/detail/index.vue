@@ -81,9 +81,13 @@
             {{ orderInfo.createTime }}
           </el-descriptions-item>
         </el-descriptions>
-        <div class="btn">
-          <el-button>取消预约</el-button>
-          <el-button type="primary">去支付</el-button>
+        <div class="btn" v-if="orderInfo.orderStatus != -1">
+          <el-popconfirm title="确定取消预约？" @confirm="cancel">
+            <template #reference>
+              <el-button>取消预约</el-button>
+            </template>
+          </el-popconfirm>
+          <el-button type="primary" v-if="orderInfo.orderStatus == 0">去支付</el-button>
         </div>
       </div>
       <div class="b_right">
@@ -110,11 +114,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 //引入请求方法
-import { getOrderInfo } from "@/api/user/index.ts";
+import { getOrderInfo, cancelOrder } from "@/api/user/index.ts";
 // 引入ts类型
 import type { GetOrderInfoResponseData } from "@/api/user/type.ts";
 // 引入路由
 import { useRoute } from "vue-router";
+import { ElMessage } from "element-plus";
 
 // let $router = useRouter();
 let $route = useRoute();
@@ -134,13 +139,23 @@ const getOrderInfoFn = async () => {
   let id = $route.query.orderNo as unknown;
   // console.log(id);
   let res: GetOrderInfoResponseData = await getOrderInfo(id as number);
-  console.log(res);
+  // console.log(res);
   if (res.code === 200) {
     orderInfo.value = res.data
   }
+};
+// 取消预约的回调
+// 订单的状态（orderStatus） -1:取消预约  0：已预约但未支付   1：已支付
+const cancel = async () => {
+  let id = $route.query.orderNo as unknown;
+  try {
+    await cancelOrder(id as number);
+    getOrderInfoFn()
+  } catch (error) {
+    ElMessage.error("取消预约失败")
+  }
 
 };
-
 
 
 

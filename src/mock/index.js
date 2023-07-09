@@ -5,7 +5,7 @@ let data = Mock.mock({
   code: 200,
   message: "success",
   ok: true,
-  "data|+1": 202,
+  "data|200-300": 202,
 });
 // 模拟订单详细数据
 let orderInfo = Mock.mock({
@@ -42,18 +42,23 @@ let orderInfo = Mock.mock({
     orderStatus: 0,
   },
 });
-
+// /api/order/orderInfo/auth/submitOrder/1000_0/6225753336a9ba1be763dc41/430
+// /api/order/orderInfo/auth/getOrderInfo/202
 // 拦截获取订单号的请求
 Mock.mock(
-  "/api/order/orderInfo/auth/submitOrder/1000_0/6225753336a9ba1be763dc41/430",
+  RegExp("/api/order/orderInfo/auth/submitOrder" + ".*"),
   "post",
   () => {
-    console.log("mock get");
+    // console.log("mock get");
     return data;
   }
 );
 // 拦截获取订单详细信息的请求
-Mock.mock("/api/order/orderInfo/auth/getOrderInfo/202", "get", () => {
-  console.log("mock get");
-  return orderInfo;
-});
+Mock.mock(
+  RegExp("/api/order/orderInfo/auth/getOrderInfo" + ".*"),
+  "get",
+  () => {
+    // console.log("mock get");
+    return orderInfo;
+  }
+);

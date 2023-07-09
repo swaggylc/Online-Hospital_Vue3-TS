@@ -228,7 +228,7 @@ const getDoctorWorkData = async () => {
     $route.query.depcpde as string,
     workTime.value.workDate
   );
-  console.log("医生的排班数据", res);
+  // console.log("医生的排班数据", res);
   if (res.code === 200) {
     docArr.value = res.data;
   }
