@@ -77,3 +77,31 @@ export interface UserInfoData {
 export interface GetUserInfoResponseData extends ResponseData {
   data: UserInfoData;
 }
+// 用户单个证件类型
+export interface CertificateType {
+  id: number;
+  createTime: string;
+  updateTime: string;
+  isDeleted: number;
+  param: {};
+  parentId: number;
+  name: string;
+  value: string;
+  dictCode: string;
+  hasChildren: boolean;
+}
+// 获取用户证件类型接口返回的data数据类型
+export type CertificateTypeData = CertificateType[];
+
+// 获取用户证件类型接口返回的数据类型
+export interface GetCertificateTypeResponseData extends ResponseData {
+  data: CertificateTypeData;
+}
+
+// 用户认证的参数类型
+export interface UserAuthParams {
+  certificatesNo: string;
+  certificatesType: string;
+  certificatesUrl: string;
+  name: string;
+}

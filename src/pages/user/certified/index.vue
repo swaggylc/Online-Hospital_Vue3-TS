@@ -39,7 +39,7 @@
                             证件号码
                         </div>
                     </template>
-                    {{userInfo.certificatesNo}}
+                    {{ userInfo.certificatesNo }}
                 </el-descriptions-item>
             </el-descriptions>
         </div>
@@ -50,8 +50,8 @@
                 </el-form-item>
                 <el-form-item label="证件类型">
                     <el-select placeholder="请选择证件类型">
-                        <el-option label="身份证" value="身份证"></el-option>
-                        <el-option label="户口本" value="户口本"></el-option>
+                        <el-option :label="item.name" :value="item.value" v-for="item in certificateType"
+                            :key="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="证件号码">
@@ -74,15 +74,20 @@
 <script setup lang="ts">
 import { InfoFilled } from '@element-plus/icons-vue'
 import { onMounted, ref } from 'vue';
-import { getUserInfo } from '@/api/user/index.ts'
-import type { GetUserInfoResponseData } from '@/api/user/type.ts'
+import { getUserInfo, getCertificateType } from '@/api/user/index.ts'
+import type { GetUserInfoResponseData, GetCertificateTypeResponseData, CertificateTypeData } from '@/api/user/type.ts'
 
 // 存储用户信息
 const userInfo: any = ref<GetUserInfoResponseData>()
-
+// 储存证件类型
+//@ts-ignore
+const certificateType: CertificateTypeData = ref([])
 
 onMounted(() => {
+    // 获取用户信息
     getUserInfoMethod()
+    // 获取用户证件类型
+    getCertificateTypeMethod()
 })
 
 
@@ -94,7 +99,15 @@ const getUserInfoMethod = async () => {
         userInfo.value = res.data
     }
 }
-
+// 获取用户证件类型的方法
+const getCertificateTypeMethod = async () => {
+    let res: GetCertificateTypeResponseData = await getCertificateType('certificatesType')
+    console.log(res)
+    if (res.code === 200) {
+        //@ts-ignore
+        certificateType.value = res.data
+    }
+}
 
 
 

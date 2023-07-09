@@ -7,6 +7,8 @@ import {
   GetQrCodeResponseData,
   QueryPayStatusResponseData,
   GetUserInfoResponseData,
+  GetCertificateTypeResponseData,
+  UserAuthParams,
 } from "@/api/user/type.ts";
 
 // 枚举请求地址
@@ -23,6 +25,10 @@ enum API {
   QUERY_PAY_STATUS_URL = "/order/weixin/queryPayStatus/",
   // 获取用户信息的接口
   GET_USER_INFO_URL = "/user/auth/getUserInfo",
+  // 获取用户证件类型的接口
+  GET_CERTIFICATE_TYPE_URL = "/cmn/dict/findByDictCode/",
+  // 用户认证的接口
+  USER_AUTH_URL = "/user/auth/userAuah/",
 }
 // 提交订单
 export const createOrder = (
@@ -55,4 +61,14 @@ export const queryPayStatus = (orderId: number) => {
 // 获取用户信息的方法
 export const getUserInfo = () => {
   return request.get<any, GetUserInfoResponseData>(API.GET_USER_INFO_URL);
+};
+// 获取用户证件类型的方法
+export const getCertificateType = (dictCode: string) => {
+  return request.get<any, GetCertificateTypeResponseData>(
+    API.GET_CERTIFICATE_TYPE_URL + dictCode
+  );
+};
+// 用户认证的方法
+export const userAuth = (userInfo: UserAuthParams) => {
+  return request.post<any,any>(API.USER_AUTH_URL, userInfo);
 };
