@@ -68,7 +68,7 @@
               <template #label>
                 <div class="cell-item">医事服务费</div>
               </template>
-              <span style="color: red;">{{ orderInfo.amount }}</span>
+              <span style="color: red">{{ orderInfo.amount }}</span>
             </el-descriptions-item>
             <el-descriptions-item>
               <template #label>
@@ -102,8 +102,12 @@
             <!-- 卡片身体 -->
             <div class="notice">
               <span>1、请确认就诊人信息是否填写准确，若填写错误将无法取号就诊，损失由本人承担；</span>
-              <span style="color: red">2、【取号】就诊需在{{ orderInfo.fetchTime }}前在医院取号，未取号视为爽约，该号不退不换；</span>
-              <span>3、【退号】在{{ orderInfo.quitTime }}前可在线退号，逾期不可办理退号、退费；</span>
+              <span style="color: red">2、【取号】就诊需在{{
+                orderInfo.fetchTime
+              }}前在医院取号，未取号视为爽约，该号不退不换；</span>
+              <span>3、【退号】在{{
+                orderInfo.quitTime
+              }}前可在线退号，逾期不可办理退号、退费；</span>
               <span>4、北京114预约挂号支持自费患者使用身份证预约，同时支持北京市医保患者使用北京社保卡在平台预约挂号。请于就诊当日，携带预约挂号所使用的有效身份证件到院取号</span>
               <span>5、请注意北京市医保患者在住院期间不能使用社保卡在门诊取号。</span>
             </div>
@@ -112,17 +116,17 @@
       </div>
     </el-card>
     <!-- 展示支付二维码的结构 -->
-    <el-dialog width="500px" v-model="dialogTableVisible" title="微信支付">
+    <el-dialog width="500px" v-model="dialogTableVisible" title="微信支付" @close="dialogCancel">
       <!-- 二维码图片 -->
       <div class="pay">
-        <img :src="qrCodeUrl" alt="">
+        <img :src="qrCodeUrl" alt="" />
         <span>请使用微信扫一扫</span>
         <span>扫描二维码支付</span>
       </div>
 
       <!-- 对话框底部插槽 -->
       <template #footer>
-        <el-button @click="dialogTableVisible = false" type="primary">取 消</el-button>
+        <el-button @click="dialogCancel" type="primary">取 消</el-button>
       </template>
     </el-dialog>
   </div>
@@ -131,9 +135,17 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 //引入请求方法
-import { getOrderInfo, cancelOrder, getQrCode } from "@/api/user/index.ts";
+import {
+  getOrderInfo,
+  cancelOrder,
+  getQrCode,
+  queryPayStatus,
+} from "@/api/user/index.ts";
 // 引入ts类型
-import type { GetOrderInfoResponseData } from "@/api/user/type.ts";
+import type {
+  GetOrderInfoResponseData,
+  QueryPayStatusResponseData,
+} from "@/api/user/type.ts";
 // 引入路由
 import { useRoute } from "vue-router";
 import { ElMessage } from "element-plus";
@@ -141,22 +153,19 @@ import { ElMessage } from "element-plus";
 //@ts-ignore
 import QRCode from "qrcode";
 
-
-
-
-
 // let $router = useRouter();
 let $route = useRoute();
 // 存储订单详情的数据
-let orderInfo = ref<any>({})
+let orderInfo = ref<any>({});
 // 控制支付对话框的显示隐藏
-let dialogTableVisible = ref<boolean>(false)
+let dialogTableVisible = ref<boolean>(false);
 // 存储二维码图片的地址
-let qrCodeUrl = ref<string>("")
-
+let qrCodeUrl = ref<string>("");
+// 存储定时器的id
+let timerId = ref<any>();
 
 onMounted(() => {
-  getOrderInfoFn()
+  getOrderInfoFn();
 });
 
 // 获取订单详情的方法
@@ -167,7 +176,7 @@ const getOrderInfoFn = async () => {
   let res: GetOrderInfoResponseData = await getOrderInfo(id as number);
   // console.log(res);
   if (res.code === 200) {
-    orderInfo.value = res.data
+    orderInfo.value = res.data;
   }
 };
 // 取消预约的回调
@@ -176,29 +185,46 @@ const cancel = async () => {
   let id = $route.query.orderNo as unknown;
   try {
     await cancelOrder(id as number);
-    getOrderInfoFn()
+    getOrderInfoFn();
   } catch (error) {
-    ElMessage.error("取消预约失败")
+    ElMessage.error("取消预约失败");
   }
 };
 // 点击去支付的回调
 const goPay = () => {
-  dialogTableVisible.value = true
-  getPayCode()
-}
+  dialogTableVisible.value = true;
+  getPayCode();
+  // 长轮询，每隔2秒请求一次后台，判断订单是否支付成功
+  timerId.value = setInterval(async () => {
+    let id = $route.query.orderNo as unknown;
+    //@ts-ignore
+    let res: QueryPayStatusResponseData = queryPayStatus(id as number);
+    if (res.data) {
+      // 支付成功
+      ElMessage.success("支付成功");
+      // 关闭对话框
+      dialogTableVisible.value = false;
+      // 关闭定时器
+      clearInterval(timerId.value);
+    }
+  }, 2000);
+};
 // 获取支付二维码的方法
 const getPayCode = async () => {
   let id = $route.query.orderNo as unknown;
-  let res: QRCode = await getQrCode(id as number)
+  let res: QRCode = await getQrCode(id as number);
   // console.log(res);
   // 生成二维码
-  let imgUrl = await QRCode.toDataURL(res.data.codeUrl)
+  let imgUrl = await QRCode.toDataURL(res.data.codeUrl);
   // console.log(imgUrl);
-  qrCodeUrl.value = imgUrl
-
-
-
-}
+  qrCodeUrl.value = imgUrl;
+};
+// 支付页面的取消按钮的回调
+const dialogCancel = () => {
+  dialogTableVisible.value = false;
+  // 关闭定时器
+  clearInterval(timerId.value);
+};
 
 
 

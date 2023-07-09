@@ -52,3 +52,7 @@ export interface QrCodeData {
 export interface GetQrCodeResponseData extends ResponseData {
   data: QrCodeData;
 }
+// 查询订单支付状态接口返回的数据类型
+export interface QueryPayStatusResponseData extends ResponseData {
+  data: boolean;
+}
