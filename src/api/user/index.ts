@@ -4,6 +4,7 @@ import request from "@/utils/request";
 import {
   CreateOrderResponseData,
   GetOrderInfoResponseData,
+  GetQrCodeResponseData,
 } from "@/api/user/type.ts";
 
 // 枚举请求地址
@@ -14,6 +15,8 @@ enum API {
   GETORDERINFO_URL = "/order/orderInfo/auth/getOrderInfo/",
   // 取消订单的接口
   CANCELORDER_URL = "/order/orderInfo/auth/cancelOrder/",
+  // 获取支付订单的二维码接口
+  QRCODE_URL = "/order/weixin/createNative/",
 }
 // 提交订单
 export const createOrder = (
@@ -32,4 +35,8 @@ export const getOrderInfo = (id: number) => {
 // 取消订单的方法
 export const cancelOrder = (orderId: number) => {
   return request.get<any>(API.CANCELORDER_URL + orderId);
+};
+// 获取支付订单的二维码的方法
+export const getQrCode = (orderId: number) => {
+  return request.get<any, GetQrCodeResponseData>(API.QRCODE_URL + orderId);
 };

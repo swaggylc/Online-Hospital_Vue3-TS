@@ -41,3 +41,14 @@ export interface OrderInfoData {
 export interface GetOrderInfoResponseData extends ResponseData {
   data: OrderInfoData;
 }
+// 获取支付订单二维码接口中data的数据类型
+export interface QrCodeData {
+  codeUrl: string;
+  orderId: number;
+  totalFee: number;
+  resultCode: string;
+}
+// 获取支付订单二维码接口返回的数据类型
+export interface GetQrCodeResponseData extends ResponseData {
+  data: QrCodeData;
+}

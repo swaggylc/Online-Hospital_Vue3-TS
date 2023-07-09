@@ -115,7 +115,7 @@
     <el-dialog width="500px" v-model="dialogTableVisible" title="微信支付">
       <!-- 二维码图片 -->
       <div class="pay">
-        <img src="../../../../assets/images/code_app.png" alt="">
+        <img :src="qrCodeUrl" alt="">
         <span>请使用微信扫一扫</span>
         <span>扫描二维码支付</span>
       </div>
@@ -131,12 +131,19 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 //引入请求方法
-import { getOrderInfo, cancelOrder } from "@/api/user/index.ts";
+import { getOrderInfo, cancelOrder, getQrCode } from "@/api/user/index.ts";
 // 引入ts类型
 import type { GetOrderInfoResponseData } from "@/api/user/type.ts";
 // 引入路由
 import { useRoute } from "vue-router";
 import { ElMessage } from "element-plus";
+// 引入生成二维码qrcode插件
+//@ts-ignore
+import QRCode from "qrcode";
+
+
+
+
 
 // let $router = useRouter();
 let $route = useRoute();
@@ -144,6 +151,8 @@ let $route = useRoute();
 let orderInfo = ref<any>({})
 // 控制支付对话框的显示隐藏
 let dialogTableVisible = ref<boolean>(false)
+// 存储二维码图片的地址
+let qrCodeUrl = ref<string>("")
 
 
 onMounted(() => {
@@ -175,8 +184,21 @@ const cancel = async () => {
 // 点击去支付的回调
 const goPay = () => {
   dialogTableVisible.value = true
+  getPayCode()
 }
+// 获取支付二维码的方法
+const getPayCode = async () => {
+  let id = $route.query.orderNo as unknown;
+  let res: QRCode = await getQrCode(id as number)
+  // console.log(res);
+  // 生成二维码
+  let imgUrl = await QRCode.toDataURL(res.data.codeUrl)
+  // console.log(imgUrl);
+  qrCodeUrl.value = imgUrl
 
+
+
+}
 
 
 
@@ -276,4 +298,5 @@ const goPay = () => {
     line-height: 20px;
     color: #7f7f7f;
   }
-}</style>
+}
+</style>
