@@ -80,7 +80,6 @@
 
 <script setup lang="ts">
 import { Pointer } from "@element-plus/icons-vue";
-import visitor from "./visitor.vue";
 // 引入获取就诊人信息的接口
 import { getUser, getDoctor } from "@/api/hospital/index.ts";
 // 引入创建订单的接口

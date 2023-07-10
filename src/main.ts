@@ -10,6 +10,7 @@ import App from "@/App.vue";
 import HospitalTop from "@/components/hospital_top/index.vue";
 import HospitalBottom from "@/components/hospital_bottom/index.vue";
 import Login from "@/components/login/index.vue";
+import Visitor from "@/components/visitor/index.vue";
 // 引入vue-router
 import router from "@/router/index.ts";
 // 引入pinia仓库
@@ -27,6 +28,7 @@ const app = createApp(App);
 app.component("HospitalTop", HospitalTop);
 app.component("HospitalBottom", HospitalBottom);
 app.component("Login", Login);
+app.component("Visitor", Visitor);
 // 安装vue-router
 app.use(router);
 // 安装pinia仓库
