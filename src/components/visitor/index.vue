@@ -6,7 +6,7 @@
                 <div class="name">{{ props.user.name }}</div>
             </div>
             <div class="right">
-                <el-button type="primary" :icon="Edit" circle />
+                <el-button type="primary" :icon="Edit" circle @click="Change" />
                 <el-button type="danger" :icon="Delete" circle v-if="$route.path=='/user/visitor_manage'" />
             </div>
         </div>
@@ -47,9 +47,15 @@ import { useRoute } from "vue-router";
 let props = defineProps(["user", "index", "userIndex"]);
 
 let $route = useRoute();
-
 // 根据路由判断是否显示删除按钮
 // console.log('$route.path',$route.path);
+
+let $emit=defineEmits(['change'])
+
+// 修改按钮的回调
+const Change = () => {
+    $emit('change')
+};
 
 
 </script>
