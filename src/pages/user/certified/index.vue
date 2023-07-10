@@ -44,20 +44,20 @@
             </el-descriptions>
         </div>
         <div class="fail" v-else>
-            <el-form style="width: 60%; margin: 20px auto;" label-width="80px">
-                <el-form-item label="用户姓名">
+            <el-form ref="forms" style="width: 60%; margin: 20px auto;" label-width="80px" :model="form" :rules="rules">
+                <el-form-item label="用户姓名" prop="name">
                     <el-input placeholder="请输入用户姓名" v-model="form.name"></el-input>
                 </el-form-item>
-                <el-form-item label="证件类型">
+                <el-form-item label="证件类型" prop="certificatesType">
                     <el-select placeholder="请选择证件类型" v-model="form.certificatesType">
                         <el-option :label="item.name" :value="item.value" v-for="item in certificateType"
                             :key="item.id"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="证件号码">
+                <el-form-item label="证件号码" prop="certificatesNo">
                     <el-input placeholder="请输入证件号码" v-model="form.certificatesNo"></el-input>
                 </el-form-item>
-                <el-form-item label="上传证件">
+                <el-form-item label="上传证件" prop="certificatesUrl">
                     <!-- action：upload组件向服务器提交图片的路径 -->
                     <!-- limit：上传限制个数 -->
                     <!-- on-exceed：超出上传数量的钩子-->
@@ -105,6 +105,7 @@ const form = reactive<UserAuthParams>({
 let dialogVisible = ref<boolean>(false)
 // upload实例
 let upload: any = ref()
+let forms: any = ref()
 
 onMounted(() => {
     // 获取用户信息
@@ -139,6 +140,8 @@ const exceedHandler = (files: any, fileList: any) => {
 }
 // 上传图片成功的钩子
 const successHandler = (res: any) => {
+    // 图片上传成功，清除校验错误
+    forms.value.clearValidate()
     // console.log(res)
     // 上传成功后，将图片的路径赋值给form.certificatesUrl
     form.certificatesUrl = res.data
@@ -148,6 +151,9 @@ const successHandler = (res: any) => {
 
 // 会员认证的方法
 const authMethod = async () => {
+    // 校验全部表单，返回一个promise
+    // 若失败，则返回一个错误对象，后面语句不会执行
+    await forms.value.validate()
     try {
         let res: any = await userAuth(form)
         if (res.code === 200) {
@@ -182,9 +188,82 @@ const beEmpty = () => {
     form.certificatesNo = ''
     form.certificatesUrl = ''
 }
+// @ts-ignore
+const validatorName = (rule: any, value: any, callback: any) => {
+    // rule：当前校验字段的校验规则对象
+    // value：当前校验字段的值
+    // callback：回调函数（调用则放行）
+    const reg = /^[\u00B7\u3007\u3400-\u4DBF\u4E00-\u9FFF\uE000-\uF8FF\uD840-\uD8C0\uDC00-\uDFFF\uF900-\uFAFF]+$/
+    if (reg.test(value)) {
+        callback()
+    } else {
+        callback(new Error('姓名只能是中文'))
+    }
+}
+// @ts-ignore
+const validatorType = (rule: any, value: any, callback: any) => {
+    if (value == '20' || value == '10') {
+        callback()
+    } else {
+        callback(new Error('请选择证件类型'))
+    }
+}
+// @ts-ignore
+const validatorNo = (rule: any, value: any, callback: any) => {
+    // 身份证的正则表达式
+    const reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
+    if (reg.test(value)) {
+        callback()
+    } else {
+        callback(new Error('请输入正确的证件号码'))
+    }
+}
+// @ts-ignore
+const validatorUrl = (rule: any, value: any, callback: any) => {
+    if (value.length > 0) {
+        callback()
+    } else {
+        callback(new Error('请上传证件照片'))
+    }
+}
+// 表单校验规则
+const rules = {
+    name: [
+        {
+            required: true,
+            message: '请输入姓名',
+            trigger: 'blur',
+            // 自定义校验规则
+            validator: validatorName
+        }
+    ],
+    certificatesType: [
+        {
+            required: true,
+            message: '请选择证件类型',
+            trigger: 'change',
+            validator: validatorType
+        }
+    ],
+    certificatesNo: [
+        {
+            required: true,
+            message: '请输入证件号码',
+            trigger: 'blur',
+            validator: validatorNo
 
+        }
+    ],
+    certificatesUrl: [
+        {
+            required: true,
+            message: '请上传证件照片',
+            trigger: 'change',
+            validator: validatorUrl
 
-
+        }
+    ]
+}
 
 
 
