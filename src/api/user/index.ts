@@ -9,6 +9,7 @@ import {
   GetUserInfoResponseData,
   GetCertificateTypeResponseData,
   UserAuthParams,
+  GetOrderListResponseData,
 } from "@/api/user/type.ts";
 
 // 枚举请求地址
@@ -29,6 +30,8 @@ enum API {
   GET_CERTIFICATE_TYPE_URL = "/cmn/dict/findByDictCode/",
   // 用户认证的接口
   USER_AUTH_URL = "/user/auth/userAuah/",
+  // 获取用户订单列表的接口
+  GET_ORDER_LIST_URL = "/order/orderInfo/auth/",
 }
 // 提交订单
 export const createOrder = (
@@ -70,5 +73,17 @@ export const getCertificateType = (dictCode: string) => {
 };
 // 用户认证的方法
 export const userAuth = (userInfo: UserAuthParams) => {
-  return request.post<any,any>(API.USER_AUTH_URL, userInfo);
+  return request.post<any, any>(API.USER_AUTH_URL, userInfo);
+};
+// 获取用户订单列表的方法
+export const getOrderList = (
+  page: number,
+  limit: number,
+  patientId: string,
+  orderStatus: string
+) => {
+  return request.get<any, GetOrderListResponseData>(
+    API.GET_ORDER_LIST_URL +
+      `${page}/${limit}?patientId=${patientId}&orderStatus=${orderStatus}`
+  );
 };

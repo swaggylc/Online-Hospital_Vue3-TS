@@ -105,3 +105,48 @@ export interface UserAuthParams {
   certificatesUrl: string;
   name: string;
 }
+// 一个订单的数据类型
+export interface OrderListItem {
+  id: number;
+  createTime: string;
+  updateTime: string;
+  isDeleted: number;
+  param: {
+    orderStatusString: string;
+  };
+  userId: number;
+  outTradeNo: string;
+  hoscode: string;
+  hosname: string;
+  depcode: string;
+  depname: string;
+  title: string;
+  scheduleId: null;
+  reserveDate: string;
+  reserveTime: number;
+  patientId: number;
+  patientName: string;
+  patientPhone: string;
+  hosRecordId: string;
+  number: number;
+  fetchTime: string;
+  fetchAddress: string;
+  quitTime: string;
+  orderStatus: number;
+  amount: number;
+}
+export type records = OrderListItem[];
+
+// 获取订单列表接口返回的数据类型
+export interface GetOrderListResponseData extends ResponseData {
+  data: {
+    records: records;
+    total: number;
+    size: number;
+    current: number;
+    orders: [];
+    searchCount: boolean;
+    pages: number;
+    hitCount: boolean;
+  };
+}
