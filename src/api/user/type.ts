@@ -150,3 +150,54 @@ export interface GetOrderListResponseData extends ResponseData {
     hitCount: boolean;
   };
 }
+// 一个就诊人的数据类型
+export interface PatientListItem {
+  id: string;
+  createTime: string;
+  updateTime: string;
+  isDeleted: number;
+  param: {
+    certificatesTypeString: string;
+    contactsCertificatesTypeString: string;
+    cityString: null;
+    fullAddress: string;
+    districtString: null;
+    provinceString: null;
+  };
+  userId: string;
+  name: string;
+  certificatesType: string;
+  certificatesNo: string;
+  sex: number;
+  birthdate: string;
+  phone: string;
+  isMarry: number;
+  provinceCode: null;
+  cityCode: null;
+  districtCode: null;
+  address: string;
+  contactsName: string;
+  contactsCertificatesType: string;
+  contactsCertificatesNo: string;
+  contactsPhone: string;
+  isInsure: number;
+  cardNo: null;
+  status: string;
+}
+// 就诊人数组的数据类型（data）
+export type PatientListData = PatientListItem[];
+// 获取就诊人列表接口返回的数据类型
+export interface GetPatientListResponseData extends ResponseData {
+  data: PatientListData;
+}
+// 订单状态的数据类型
+export interface OrderStatus {
+  comment: string;
+  status: number;
+}
+// 订单状态数组的数据类型（data）
+export type OrderStatusData = OrderStatus[];
+// 获取订单状态列表接口返回的数据类型
+export interface GetOrderStatusResponseData extends ResponseData {
+  data: OrderStatusData;
+}

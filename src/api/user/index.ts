@@ -10,6 +10,8 @@ import {
   GetCertificateTypeResponseData,
   UserAuthParams,
   GetOrderListResponseData,
+  GetPatientListResponseData,
+  GetOrderStatusResponseData,
 } from "@/api/user/type.ts";
 
 // 枚举请求地址
@@ -32,6 +34,10 @@ enum API {
   USER_AUTH_URL = "/user/auth/userAuah/",
   // 获取用户订单列表的接口
   GET_ORDER_LIST_URL = "/order/orderInfo/auth/",
+  // 获取就诊人列表的接口
+  GET_PATIENT_LIST_URL = "/user/patient/auth/findAll/",
+  // 获取订单状态的接口
+  GET_ORDER_STATUS_URL = "/order/orderInfo/auth/getStatusList/",
 }
 // 提交订单
 export const createOrder = (
@@ -86,4 +92,12 @@ export const getOrderList = (
     API.GET_ORDER_LIST_URL +
       `${page}/${limit}?patientId=${patientId}&orderStatus=${orderStatus}`
   );
+};
+// 获取就诊人列表的方法
+export const getPatientList = () => {
+  return request.get<any, GetPatientListResponseData>(API.GET_PATIENT_LIST_URL);
+};
+// 获取订单状态的方法
+export const getOrderStatus = () => {
+  return request.get<any, GetOrderStatusResponseData>(API.GET_ORDER_STATUS_URL);
 };
