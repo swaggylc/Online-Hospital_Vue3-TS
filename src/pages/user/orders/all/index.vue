@@ -8,20 +8,21 @@
         <!-- 提供用户选择的下拉菜单 -->
         <el-form :inline="true" class="demo-form-inline">
             <el-form-item label="就诊人">
-                <el-select placeholder="请选择就诊人">
-                    <el-option label="Zone one" value="shanghai" />
-                    <el-option label="Zone two" value="beijing" />
+                <el-select placeholder="请选择就诊人" v-model="patientId" @change="changePatient">
+                    <el-option label="全部" value=""></el-option>
+                    <el-option :label="item.name" :value="item.id" v-for="item in patientList" :key="item.id" />
                 </el-select>
             </el-form-item>
             <el-form-item label="订单状态">
-                <el-select placeholder="请选择订单状态">
-                    <el-option label="Zone one" value="shanghai" />
-                    <el-option label="Zone two" value="beijing" />
+                <el-select placeholder="请选择订单状态" v-model="orderStatus" @change="changeStatus">
+                    <el-option label="全部" value=""></el-option>
+                    <el-option :label="item.comment" :value="item.status" v-for="item in orderStatusList"
+                        :key="item.status" />
                 </el-select>
             </el-form-item>
         </el-form>
         <!-- 展示订单数据的表格 -->
-        <el-table height="250" style="width: 100%;margin: 20px 0;" :border="true" :data="orderList">
+        <el-table style="width: 100%;margin: 20px 0;" :border="true" :data="orderList" max-height="500">
             <el-table-column prop="reserveDate" label="就诊时间" />
             <el-table-column prop="hosname" label="医院" />
             <el-table-column prop="depname" label="科室" width="200" />
@@ -44,10 +45,10 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-// 引入获取订单列表的方法
-import { getOrderList } from '@/api/user/index.ts'
+// 引入获取订单的方法
+import { getOrderList, getPatientList, getOrderStatus } from '@/api/user/index.ts'
 // 引入订单列表返回的ts数据类型
-import type { GetOrderListResponseData, records } from '@/api/user/type.ts'
+import type { GetOrderStatusResponseData, GetOrderListResponseData, records, GetPatientListResponseData, PatientListData, OrderStatusData } from '@/api/user/type.ts'
 import { useRouter } from 'vue-router';
 let $router = useRouter()
 
@@ -58,15 +59,20 @@ let patientId = ref<string>('')  // 就诊人id
 let orderStatus = ref<string>('') // 订单状态
 let orderList = ref<records>([]) // 订单列表
 let total = ref<number>(0) // 订单总数
+let patientList = ref<PatientListData>([]) // 就诊人列表
+let orderStatusList = ref<OrderStatusData>([]) // 订单状态列表
+
 
 onMounted(() => {
     GetOrderList()
+    GetPatientList()
+    GetOrderStatus()
 })
 
 // 获取订单列表的方法
 const GetOrderList = async () => {
     let res: GetOrderListResponseData = await getOrderList(pageNo.value, pageSize.value, patientId.value, orderStatus.value)
-    console.log(res);
+    // console.log(res);
     if (res.code === 200) {
         orderList.value = res.data.records
         total.value = res.data.total
@@ -94,10 +100,34 @@ const changeSize = (val: number) => {
     pageSize.value = val
     GetOrderList()
 }
-
-
-
-
+// 获取所有就诊人的方法
+const GetPatientList = async () => {
+    let res: GetPatientListResponseData = await getPatientList()
+    // console.log('所有就诊人信息',res);
+    if (res.code === 200) {
+        patientList.value = res.data
+    }
+}
+// 获取订单状态的方法
+const GetOrderStatus = async () => {
+    let res: GetOrderStatusResponseData = await getOrderStatus()
+    // console.log('订单状态', res);
+    if (res.code === 200) {
+        orderStatusList.value = res.data
+    }
+}
+// 选择就诊人的回调
+const changePatient = (val: string) => {
+    // console.log(val);
+    patientId.value = val
+    GetOrderList()
+}
+// 选择订单状态的回调
+const changeStatus = (val: string) => {
+    // console.log(val);
+    orderStatus.value = val
+    GetOrderList()
+}
 
 
 

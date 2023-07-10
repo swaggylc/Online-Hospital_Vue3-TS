@@ -44,7 +44,7 @@
               <template #label>
                 <div class="cell-item">就诊日期</div>
               </template>
-              {{ orderInfo.reserveDate }}-{{ orderInfo.reserveTime }}
+              {{ orderInfo.reserveDate }}
             </el-descriptions-item>
             <el-descriptions-item>
               <template #label>
@@ -83,7 +83,7 @@
               {{ orderInfo.createTime }}
             </el-descriptions-item>
           </el-descriptions>
-          <div class="btn" v-if="orderInfo.orderStatus != -1">
+          <div class="btn" v-if="orderInfo.orderStatus == 0">
             <el-popconfirm title="确定取消预约？" @confirm="cancel">
               <template #reference>
                 <el-button>取消预约</el-button>
@@ -198,7 +198,9 @@ const goPay = () => {
   timerId.value = setInterval(async () => {
     let id = $route.query.orderNo as unknown;
     //@ts-ignore
-    let res: QueryPayStatusResponseData = queryPayStatus(id as number);
+    let res: QueryPayStatusResponseData = await queryPayStatus(id as number);
+    // console.log('支付的返回', res);
+
     if (res.data) {
       // 支付成功
       ElMessage.success("支付成功");
@@ -206,8 +208,10 @@ const goPay = () => {
       dialogTableVisible.value = false;
       // 关闭定时器
       clearInterval(timerId.value);
+      // 重新获取订单详情
+      getOrderInfoFn();
     }
-  }, 2000);
+  }, 3000);
 };
 // 获取支付二维码的方法
 const getPayCode = async () => {
