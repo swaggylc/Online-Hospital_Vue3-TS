@@ -38,6 +38,8 @@ enum API {
   GET_PATIENT_LIST_URL = "/user/patient/auth/findAll/",
   // 获取订单状态的接口
   GET_ORDER_STATUS_URL = "/order/orderInfo/auth/getStatusList/",
+  // 获取城市的接口
+  GET_CITY_LIST_URL = "/cmn/dict/findByParentId/",
 }
 // 提交订单
 export const createOrder = (
@@ -100,4 +102,8 @@ export const getPatientList = () => {
 // 获取订单状态的方法
 export const getOrderStatus = () => {
   return request.get<any, GetOrderStatusResponseData>(API.GET_ORDER_STATUS_URL);
+};
+// 获取城市的方法
+export const getCityList = (parentId: string) => {
+  return request.get<any>(API.GET_CITY_LIST_URL + parentId);
 };

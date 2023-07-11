@@ -20,8 +20,7 @@
         </el-form-item>
         <el-form-item label="证件类型">
           <el-select placeholder="请选择证件类型">
-            <el-option label="身份证" value="1"></el-option>
-            <el-option label="户口本" value="2"></el-option>
+            <el-option :label="item.name" :value="item.value" v-for="item in certificateType" :key="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="证件号码">
@@ -55,7 +54,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="当前住址">
-          <el-cascader v-model="value" :options="options" @change="handleChange" placeholder="请选择住址" />
+          <el-cascader placeholder="请选择住址" :props="props" />
         </el-form-item>
         <el-form-item label="详细地址">
           <el-input placeholder="请输入详细地址"></el-input>
@@ -68,8 +67,7 @@
         </el-form-item>
         <el-form-item label="证件类型">
           <el-select placeholder="请选择证件类型">
-            <el-option label="身份证" value="1"></el-option>
-            <el-option label="户口本" value="2"></el-option>
+            <el-option :label="item.name" :value="item.value" v-for="item in certificateType" :key="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="证件号码">
@@ -91,17 +89,22 @@
 import { onMounted, ref } from 'vue';
 import { User } from '@element-plus/icons-vue'
 // 引入方法
-import { getPatientList } from '@/api/user/index.ts'
+import { getPatientList, getCertificateType, getCityList } from '@/api/user/index.ts'
 // 引入ts类型
-import type { GetPatientListResponseData, PatientListData } from '@/api/user/type.ts'
-
+import type { GetPatientListResponseData, PatientListData, GetCertificateTypeResponseData, CertificateTypeData } from '@/api/user/type.ts'
+import type { CascaderProps } from 'element-plus'
 let patientList = ref<PatientListData>([])
 // 决定是否显示添加/修改就诊人的结构
 let isShow = ref<number>(0)
+// 证件类型
+let certificateType = ref<CertificateTypeData>([])
+
 
 onMounted(() => {
+  // 获取就诊人列表
   getPatientListData()
-
+  // 获取证件类型
+  GetCertificateTypeData()
 })
 
 // 获取就诊人列表的方法
@@ -147,9 +150,37 @@ const shortcuts = [
     },
   },
 ]
+// 获取用户证件类型的方法
+const GetCertificateTypeData = async () => {
+  let res: GetCertificateTypeResponseData = await getCertificateType('certificatesType')
+  // console.log("证件类型", res)
+  if (res.code === 200) {
+    certificateType.value = res.data
+  }
+}
+// 地址的级联选择器数据
+const props: CascaderProps = {
+  // 数据懒加载
+  lazy: true,
+  // 懒加载的方法
+  async lazyLoad(node, resolve) {
+    console.log("node", node);
 
-
-
+    let res: any = await getCityList(node.data?.value as string || '86')
+    // console.log("城市列表", res)
+    // 整理数据
+    let showData = res.data.map((item: any) => {
+      return {
+        value: item.value,
+        label: item.name,
+        leaf: !item.hasChildren
+      }
+    })
+    // console.log("整理后的数据",showData)
+    // 将数据返回给级联选择器
+    resolve(showData)
+  }
+}
 
 
 
