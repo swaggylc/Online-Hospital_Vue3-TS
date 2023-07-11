@@ -201,3 +201,21 @@ export type OrderStatusData = OrderStatus[];
 export interface GetOrderStatusResponseData extends ResponseData {
   data: OrderStatusData;
 }
+// 新增与修改就诊人的参数类型
+export interface PatientParams {
+  id?: string;
+  name: string;
+  certificatesType: string;
+  certificatesNo: string;
+  sex: number;
+  birthdate: string;
+  phone: string;
+  isMarry: number;
+  isInsure: number;
+  addressSelected: string[];
+  address: string;
+  contactsName: string;
+  contactsCertificatesType: string;
+  contactsCertificatesNo: string;
+  contactsPhone: string;
+}

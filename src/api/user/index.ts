@@ -12,6 +12,7 @@ import {
   GetOrderListResponseData,
   GetPatientListResponseData,
   GetOrderStatusResponseData,
+  PatientParams,
 } from "@/api/user/type.ts";
 
 // 枚举请求地址
@@ -40,6 +41,10 @@ enum API {
   GET_ORDER_STATUS_URL = "/order/orderInfo/auth/getStatusList/",
   // 获取城市的接口
   GET_CITY_LIST_URL = "/cmn/dict/findByParentId/",
+  // 新增就诊人的接口
+  SAVE_PATIENT_URL = "/user/patient/auth/save/",
+  // 更新就诊人信息的接口
+  UPDATE_PATIENT_URL = "/user/patient/auth/update/",
 }
 // 提交订单
 export const createOrder = (
@@ -106,4 +111,12 @@ export const getOrderStatus = () => {
 // 获取城市的方法
 export const getCityList = (parentId: string) => {
   return request.get<any>(API.GET_CITY_LIST_URL + parentId);
+};
+// 新增与修改就诊人的方法
+export const saveOrUpdatePatient = (data: PatientParams) => {
+  if (data.id) {
+    return request.put<any>(API.UPDATE_PATIENT_URL, data);
+  } else {
+    return request.post<any>(API.SAVE_PATIENT_URL, data);
+  }
 };
