@@ -64,6 +64,14 @@ pinia中没有vuex的mutation
 
 #### 5、路由鉴权
 
+用户未登录可访问：/home	/hospital/register	/hospital/detail	/hospital/notice	/hospital/close	/hospital/search
+
+其余路由未登录不可访问
+
+用户若登陆则所有路由均可访问
+
+
+
 #### 6、封装通用全局组件
 
 #### 7、Vue3组合式API

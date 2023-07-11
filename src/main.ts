@@ -37,6 +37,8 @@ app.use(pinia);
 app.use(ElementPlus, {
   locale: zhCn,
 });
-
+// 引入路由鉴权的文件
+import "@/Authentication.ts";
 // 挂载到id为app的元素上
 app.mount("#app");
+
