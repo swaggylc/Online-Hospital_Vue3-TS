@@ -7,7 +7,7 @@
       <template #header>
         <div class="card-header">
           <span>请选择就诊人</span>
-          <el-button type="primary" size="default" :icon="Pointer">添加就诊人</el-button>
+          <el-button type="primary" size="default" :icon="Pointer" @click="goVisitor">添加就诊人</el-button>
         </div>
       </template>
       <!-- 展示就诊人信息 -->
@@ -159,6 +159,28 @@ const confirmRegister = async () => {
     ElMessage.error(res.message);
   }
 };
+// 添加就诊人的回调
+const goVisitor=()=>{
+  $router.push({
+    path:"/user/visitor_manage",
+    query:{
+      type:"add"
+    }
+  })
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 </script>
 
 <style scoped lang="scss">
