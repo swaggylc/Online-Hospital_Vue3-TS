@@ -45,6 +45,8 @@ enum API {
   SAVE_PATIENT_URL = "/user/patient/auth/save/",
   // 更新就诊人信息的接口
   UPDATE_PATIENT_URL = "/user/patient/auth/update/",
+  // 删除就诊人的接口
+  REMOVE_PATIENT_URL = "/user/patient/auth/remove/",
 }
 // 提交订单
 export const createOrder = (
@@ -119,4 +121,8 @@ export const saveOrUpdatePatient = (data: PatientParams) => {
   } else {
     return request.post<any>(API.SAVE_PATIENT_URL, data);
   }
+};
+// 删除就诊人的方法
+export const removePatient = (id: string) => {
+  return request.delete<any>(API.REMOVE_PATIENT_URL + id);
 };

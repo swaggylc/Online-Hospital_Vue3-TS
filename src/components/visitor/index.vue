@@ -7,7 +7,11 @@
             </div>
             <div class="right">
                 <el-button type="primary" :icon="Edit" circle @click="Change" />
-                <el-button type="danger" :icon="Delete" circle v-if="$route.path == '/user/visitor_manage'" />
+                <el-popconfirm :title="`你确定要删除${user.name}吗?`" @confirm="deletePatient">
+                    <template #reference>
+                        <el-button type="danger" :icon="Delete" circle v-if="$route.path == '/user/visitor_manage'" />
+                    </template>
+                </el-popconfirm>
             </div>
         </div>
         <div class="content">
@@ -50,7 +54,7 @@ let $route = useRoute();
 // 根据路由判断是否显示删除按钮
 // console.log('$route.path',$route.path);
 
-let $emit = defineEmits(['change'])
+let $emit = defineEmits(['change', 'delete'])
 
 // 修改按钮的回调
 const Change = () => {
@@ -67,6 +71,10 @@ const Change = () => {
             }
         })
     }
+};
+// 删除按钮的回调
+const deletePatient = () => {
+    $emit('delete', props.user.id)
 };
 
 

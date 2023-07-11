@@ -9,7 +9,7 @@
     <!-- 放置就诊人卡片 -->
     <div class="content" v-if="isShow == 0">
       <Visitor @change="changeScene" class="item" v-for="(item, index) in patientList" :key="item.id" :user="item"
-        :index="index"></Visitor>
+        :index="index" @delete="deletePatient"></Visitor>
     </div>
     <!-- 添加/修改就诊人的结构 -->
     <div class="addPatient" v-if="isShow == 1">
@@ -90,7 +90,7 @@
 import { onMounted, ref, reactive, watch } from 'vue';
 import { User } from '@element-plus/icons-vue'
 // 引入方法
-import { getPatientList, getCertificateType, getCityList, saveOrUpdatePatient } from '@/api/user/index.ts'
+import { getPatientList, getCertificateType, getCityList, saveOrUpdatePatient, removePatient } from '@/api/user/index.ts'
 // 引入ts类型
 import type { GetPatientListResponseData, PatientListData, GetCertificateTypeResponseData, CertificateTypeData, PatientParams } from '@/api/user/type.ts'
 import { ElMessage, type CascaderProps } from 'element-plus'
@@ -278,6 +278,23 @@ watch(patientList, (newVal) => {
     })
   }
 })
+// 删除就诊人的回调
+const deletePatient = (id: string) => {
+  deletePatientData(id)
+}
+
+// 删除就诊人的方法
+const deletePatientData = async (id: string) => {
+  let res: any = await removePatient(id)
+  if (res.code === 200) {
+    ElMessage.success('删除成功')
+    getPatientListData()
+  } else {
+    ElMessage.error('删除失败')
+  }
+}
+
+
 
 
 </script>
