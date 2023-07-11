@@ -7,7 +7,7 @@
             </div>
             <div class="right">
                 <el-button type="primary" :icon="Edit" circle @click="Change" />
-                <el-button type="danger" :icon="Delete" circle v-if="$route.path=='/user/visitor_manage'" />
+                <el-button type="danger" :icon="Delete" circle v-if="$route.path == '/user/visitor_manage'" />
             </div>
         </div>
         <div class="content">
@@ -42,19 +42,31 @@
 </template>
   
 <script setup lang="ts">
-import { Edit,Delete } from "@element-plus/icons-vue";
-import { useRoute } from "vue-router";
+import { Edit, Delete } from "@element-plus/icons-vue";
+import { useRoute, useRouter } from "vue-router";
 let props = defineProps(["user", "index", "userIndex"]);
-
+let $router = useRouter();
 let $route = useRoute();
 // 根据路由判断是否显示删除按钮
 // console.log('$route.path',$route.path);
 
-let $emit=defineEmits(['change'])
+let $emit = defineEmits(['change'])
 
 // 修改按钮的回调
 const Change = () => {
-    $emit('change')
+    // 可能是就诊人管理页面，也可能是预约挂号页面
+    if ($route.path == '/user/visitor_manage') {
+        $emit('change', props.user)
+    } else {
+        // 跳转到就诊人管理页面
+        $router.push({
+            path: '/user/visitor_manage',
+            query: {
+                type: 'edit',
+                id: props.user.id
+            }
+        })
+    }
 };
 
 
@@ -159,5 +171,6 @@ const Change = () => {
             transform: scale(1.2);
         }
     }
-}</style>
+}
+</style>
   

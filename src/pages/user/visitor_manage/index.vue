@@ -87,7 +87,7 @@
 </template>                                                                                                                                      
                                             
 <script setup lang="ts">
-import { onMounted, ref, reactive } from 'vue';
+import { onMounted, ref, reactive, watch } from 'vue';
 import { User } from '@element-plus/icons-vue'
 // 引入方法
 import { getPatientList, getCertificateType, getCityList, saveOrUpdatePatient } from '@/api/user/index.ts'
@@ -97,7 +97,7 @@ import { ElMessage, type CascaderProps } from 'element-plus'
 import { useRoute, useRouter } from 'vue-router'
 let $route = useRoute()
 let $router = useRouter()
-let patientList = ref<PatientListData>([])
+let patientList = ref<PatientListData>([])  // 就诊人列表
 // 决定是否显示添加/修改就诊人的结构
 let isShow = ref<number>(0)
 // 证件类型
@@ -125,7 +125,10 @@ onMounted(() => {
   getPatientListData()
   // 获取证件类型
   GetCertificateTypeData()
+  // 判断是否从预约挂号就诊人列表跳转过来的
   isFromPatientList()
+  // 判断是否是从预约挂号就诊人列表修改就诊人
+  // isFromPatientListUpdate()
 })
 
 // 获取就诊人列表的方法
@@ -141,8 +144,11 @@ const changeContent = () => {
   isShow.value = 1
 }
 // 自定义事件
-const changeScene = () => {
+const changeScene = (user: PatientParams) => {
+  // console.log(user);
   isShow.value = 1
+  // 将用户信息赋值给addPatientInfo
+  Object.assign(addPatientInfo, user)
 }
 // 禁用日期
 const disabledDate = (time: Date) => {
@@ -209,7 +215,7 @@ const submit = async () => {
     await saveOrUpdatePatient(addPatientInfo)
     // console.log("提交的结果", res);
     ElMessage.success(addPatientInfo.id ? '修改成功' : '添加成功')
-    if ($route.query.type == 'add') {
+    if ($route.query.type) {
       // 跳转到预约挂号页面
       $router.back()
     } else {
@@ -230,16 +236,48 @@ const clearForm = () => {
     //@ts-ignore
     addPatientInfo[key] = ''
   }
+  delete addPatientInfo.id
 }
-// 判断是否从就诊人列表跳转过来的
+// 判断是否从预约挂号就诊人列表跳转过来的
 const isFromPatientList = () => {
   // console.log($route.query);
   if ($route.query.type == 'add') {
     isShow.value = 1
   }
+  if ($route.query.type == 'edit') {
+    isShow.value = 1
+  }
 }
+// 判断是否是从预约挂号就诊人列表修改就诊人
+// const isFromPatientListUpdate = () => {
+//   if ($route.query.type == 'edit') {
 
+//     // 获取就诊人的id
+//     let id = $route.query.id as string
+//     // 根据id获取就诊人的信息
+//     patientList.value.forEach((item) => {
+//       if (item.id == id) {
+//         Object.assign(addPatientInfo, item)
+//       }
+//     })
+//     isShow.value = 1
+//   }
+// }
+// 监听就诊人列表的变化
+watch(patientList, (newVal) => {
+  // console.log("监听就诊人列表", newVal)
+  if ($route.query.type == 'edit') {
 
+    // 获取就诊人的id
+    let id = $route.query.id as string
+    // 根据id获取就诊人的信息
+    newVal.forEach((item) => {
+      if (item.id == id) {
+        Object.assign(addPatientInfo, item)
+      }
+    })
+  }
+})
 
 
 </script>
