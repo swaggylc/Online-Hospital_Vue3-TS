@@ -6,7 +6,7 @@
             </div>
         </template>
         <!-- 提示部分 -->
-        <div class="tip">
+        <div class="tip" v-show="userInfo?.authStatus != 1">
             <span>
                 <el-icon>
                     <InfoFilled />
