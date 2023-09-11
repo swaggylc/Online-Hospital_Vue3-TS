@@ -27,7 +27,7 @@
             </div>
             <div class="c_right">
                 <span>{{ props.user.param.certificatesTypeString }}</span>
-                <span>{{ props.user.contactsCertificatesNo }}</span>
+                <span>{{ props.user.certificatesNo }}</span>
                 <span>{{ props.user.sex == 1 ? "男" : "女" }}</span>
                 <span>{{ props.user.birthdate }}</span>
                 <span>{{ props.user.phone }}</span>
