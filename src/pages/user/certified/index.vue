@@ -6,12 +6,13 @@
             </div>
         </template>
         <!-- 提示部分 -->
-        <div class="tip" v-show="userInfo?.authStatus != 1">
+        <div class="tip">
             <span>
                 <el-icon>
                     <InfoFilled />
                 </el-icon>
-                <span>您还未进行实名认证，认证后才能添加就诊人，为了不影响后续步骤，建议提前进行实名认证。</span>
+                <span v-if="userInfo?.authStatus != 1">您还未进行实名认证，认证后才能添加就诊人，为了不影响后续步骤，建议提前进行实名认证。</span>
+                <span v-else>您已进行实名认证</span>
             </span>
         </div>
         <!-- 卡片身体：认证成功 / 未认证 -->

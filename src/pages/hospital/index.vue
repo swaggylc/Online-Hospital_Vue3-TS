@@ -1,3 +1,13 @@
+<!--
+ * @Author: lucan lucanlc0417@gmail.com
+ * @Date: 2023-07-03 08:58:00
+ * @LastEditors: lucan lucanlc0417@gmail.com
+ * @LastEditTime: 2023-10-12 18:29:48
+ * @FilePath: \Online Hospital\src\pages\hospital\index.vue
+ * @Description: 搜索组件
+ * 
+ * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved. 
+-->
 <template>
   <div class="hospital">
     <!-- 左侧导航区 -->
@@ -75,6 +85,11 @@ const $router = useRouter();
 const $route = useRoute();
 
 // 点击左侧菜单事件的回调
+/**
+ * @description: 点击左侧菜单事件的回调
+ * @param {*} path
+ * @return {*}
+ */
 const changeActive = (path: string) => {
   // console.log(path);
   $router.push({

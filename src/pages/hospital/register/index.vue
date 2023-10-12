@@ -1,3 +1,13 @@
+<!--
+ * @Author: lucan lucanlc0417@gmail.com
+ * @Date: 2023-07-04 20:35:15
+ * @LastEditors: lucan lucanlc0417@gmail.com
+ * @LastEditTime: 2023-10-12 20:21:43
+ * @FilePath: \Online Hospital\src\pages\hospital\register\index.vue
+ * @Description: 预约挂号组件
+ * 
+ * Copyright (c) 2023 by lucan, All Rights Reserved. 
+-->
 <template>
   <div class="register">
     <div class="top">
