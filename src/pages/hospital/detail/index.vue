@@ -1,3 +1,12 @@
+<!--
+ * @Author: lucan lucanlc0417@gmail.com
+ * @Date: 2023-07-04
+ * @LastEditors: lucan lucanlc0417@gmail.com
+ * @LastEditTime: 2023-10-12
+ * @FilePath: \Online Hospital\src\pages\hospital\detail\index.vue
+ * @Description: 详情组件
+ * Copyright (c) 2023 by lucan - Tanikawa, All Rights Reserved.  
+-->
 <template>
   <div class="detail">
     <div class="top">

@@ -2,10 +2,10 @@
  * @Author: lucan lucanlc0417@gmail.com
  * @Date: 2023-07-03 08:57:24
  * @LastEditors: lucan lucanlc0417@gmail.com
- * @LastEditTime: 2023-10-12 20:25:36
+ * @LastEditTime: 2023-10-12 20:35:09
  * @FilePath: \Online Hospital\src\pages\home\index.vue
  * @Description: 
- * Copyright (c) 2023 by lucan - tanikawa, All Rights Reserved. 
+ * Copyright (c) 2023 by lucan - Tanikawa, All Rights Reserved. 
 -->
 <template>
   <div>
